@@ -6,7 +6,7 @@
   "style_group": "Стиль",
   "property_label": "Свойство",
   "property_placeholder_category": "Выберите свойство категории",
-  "property_placeholder_value": "Выберите свойство значения",
+  "line_width_label": "Толщина линии",
   "show_line_label": "Показать линию",
   "omit_zero_values_label": "Пропустить нулевые значения",
   "max_label": "Макс.",

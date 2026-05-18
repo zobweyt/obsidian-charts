@@ -6,7 +6,7 @@
   "style_group": "Style",
   "property_label": "Property",
   "property_placeholder_category": "Select category property",
-  "property_placeholder_value": "Select value property",
+  "line_width_label": "Line width",
   "show_line_label": "Show line",
   "omit_zero_values_label": "Omit zero values",
   "max_label": "Max",

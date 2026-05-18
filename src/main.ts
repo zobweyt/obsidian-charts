@@ -15,6 +15,7 @@ import type {
 } from "echarts/types/dist/shared.d.ts";
 import {
   type BasesAllOptions,
+  type BasesPropertyId,
   BasesView,
   Menu,
   Plugin,
@@ -35,26 +36,40 @@ echarts.use([
 export const BAR_VIEW_TYPE = "bar-chart";
 export const LINE_VIEW_TYPE = "line-chart";
 
+const CHART_COLORS = [
+  "var(--color-blue)",
+  "var(--color-green)",
+  "var(--color-red)",
+  "var(--color-pink)",
+  "var(--color-orange)",
+  "var(--color-cyan)",
+  "var(--color-purple)",
+  "var(--color-yellow)",
+];
+
 interface ChartData {
   labels: string[];
-  values: number[];
+  values: number[][];
   filePaths: string[];
+  seriesNames: string[];
 }
 
 interface ChartConfig {
   type: "bar" | "line";
   xProp?: string;
-  yProp?: string;
   showLabels: boolean;
   omitZero: boolean;
   yMin?: number;
   yMax?: number;
   barWidth?: number;
+  lineWidth?: number;
   color?: string;
   lineSmooth?: boolean;
   lineArea?: boolean;
   showXLine: boolean;
   showYLine: boolean;
+  showXAxisLabel: boolean;
+  showYAxisLabel: boolean;
 }
 
 interface GroupEntry {
@@ -68,62 +83,82 @@ interface GroupData {
 
 interface QueryData {
   groupedData?: GroupData[];
+  properties?: BasesPropertyId[];
 }
 
 class ChartDataExtractor {
-  static extract(data: QueryData, config: ChartConfig): ChartData {
+  static extract(
+    data: QueryData,
+    config: ChartConfig,
+    getDisplayName?: (id: string) => string,
+  ): ChartData {
     const groupedData = data?.groupedData || [];
     const labels: string[] = [];
-    const values: number[] = [];
     const filePaths: string[] = [];
+
+    const seriesNames = data?.properties || [];
+    const values: number[][] = seriesNames.map(() => []);
+
+    const displayNames = getDisplayName
+      ? seriesNames.map((name) => getDisplayName(name))
+      : seriesNames.map((name) =>
+          name.replace(/^(note\.|formula\.|file\.)/, ""),
+        );
 
     for (const group of groupedData) {
       for (const entry of group.entries) {
-        const xVal = ChartDataExtractor.extractXValue(entry, config.xProp);
-        const yVal = ChartDataExtractor.extractYValue(entry, config.yProp);
+        let xVal = entry.file?.name || "";
 
-        if (!config.omitZero || yVal !== 0) {
+        if (config.xProp && config.xProp !== "file.name") {
+          const xObj = entry.getValue(String(config.xProp));
+          if (xObj) {
+            const extractedVal =
+              typeof xObj.toString === "function"
+                ? xObj.toString()
+                : String((xObj as { value?: unknown }).value || xObj);
+            if (extractedVal && extractedVal !== "[object Object]") {
+              xVal = extractedVal;
+            }
+          }
+        }
+
+        let shouldAdd = false;
+        const rowValues: number[] = [];
+
+        for (let i = 0; i < seriesNames.length; i++) {
+          const prop = seriesNames[i];
+          const yObj = entry.getValue(prop);
+          let yVal = 0;
+
+          if (yObj) {
+            const rawVal =
+              (yObj as { value?: unknown }).value !== undefined
+                ? (yObj as { value?: unknown }).value
+                : yObj;
+            yVal = Number(rawVal);
+            if (Number.isNaN(yVal)) yVal = 0;
+          }
+
+          if (config.omitZero && yVal === 0) {
+            rowValues.push(0);
+          } else {
+            rowValues.push(yVal);
+            shouldAdd = true;
+          }
+        }
+
+        if (!config.omitZero || shouldAdd) {
           labels.push(xVal);
-          values.push(yVal);
           filePaths.push(entry.file?.path || "");
+
+          for (let i = 0; i < rowValues.length; i++) {
+            values[i].push(rowValues[i]);
+          }
         }
       }
     }
 
-    return { labels, values, filePaths };
-  }
-
-  private static extractXValue(entry: GroupEntry, xProp?: string): string {
-    if (!xProp) {
-      return entry.file?.name || "Untitled";
-    }
-
-    const xObj = entry.getValue(String(xProp));
-    if (xObj) {
-      const xVal =
-        typeof xObj.toString === "function"
-          ? xObj.toString()
-          : String((xObj as { value?: unknown }).value || xObj);
-      if (xVal && xVal !== "[object Object]") {
-        return xVal;
-      }
-    }
-
-    return entry.file?.name || "Untitled";
-  }
-
-  private static extractYValue(entry: GroupEntry, yProp?: string): number {
-    if (!yProp) return 0;
-
-    const yObj = entry.getValue(String(yProp));
-    if (!yObj) return 0;
-
-    const rawVal =
-      (yObj as { value?: unknown }).value !== undefined
-        ? (yObj as { value?: unknown }).value
-        : yObj;
-    const num = Number(rawVal);
-    return Number.isNaN(num) ? 0 : num;
+    return { labels, values, filePaths, seriesNames: displayNames };
   }
 }
 
@@ -139,15 +174,12 @@ abstract class BaseEChartsRenderer {
     this.config = config;
   }
 
-  abstract createSeriesOption(): unknown;
+  abstract createSeriesOptions(): unknown[];
 
   protected getBaseOption(): Partial<EChartsOption> {
     return {
       backgroundColor: "transparent",
       animation: false,
-      animationDuration: 0,
-      animationDurationUpdate: 0,
-      animationEasing: "linear",
       tooltip: this.createTooltipOption(),
       grid: {
         top: 40,
@@ -164,6 +196,10 @@ abstract class BaseEChartsRenderer {
     };
   }
 
+  protected cleanPropertyName(propertyId: string): string {
+    return propertyId.replace(/^(note\.|formula\.|file\.)/, "");
+  }
+
   protected createTooltipOption(): TooltipOption {
     return {
       trigger: "axis",
@@ -174,30 +210,37 @@ abstract class BaseEChartsRenderer {
       backgroundColor: "var(--background-modifier-message)",
       borderColor: "transparent",
       borderWidth: 0,
-      padding: [4, 8],
+      borderRadius: 6,
+      padding: [6, 10],
       extraCssText:
         "box-shadow: 0 2px 8px var(--background-modifier-box-shadow);",
       transitionDuration: 0,
       formatter: (params) => {
-        const firstParam = (
-          params as unknown as {
-            color?: string;
-            name?: string;
-            value?: number;
-          }[]
-        )?.[0];
-        if (firstParam) {
-          return ` 
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            <div style="width: 12px; height: 12px; border-radius: 2px; background-color: ${firstParam.color};"></div>
-                            <div style="display: flex; align-items: center; justify-content: center; gap: 16px; font-size: var(--font-ui-small); line-height: var(--line-height-tight); color: #FAFAFA; font-family: var(--font-interface);">
-                                <span>${firstParam.name}</span>
-                                <span>${firstParam.value}</span>
-                            </div>
-                        </div>
-                    `;
+        const paramsArray = params as unknown as Array<{
+          seriesName: string;
+          value: number;
+          color: string;
+          axisValue: string;
+        }>;
+        const xValue = paramsArray[0]?.axisValue || "";
+
+        if (!paramsArray || paramsArray.length === 0) return "";
+
+        let html = `<div style="display: flex; flex-directon: column; align-items: center; justify-content: space-between; gap: 4px;"><div style="font-size: var(--font-ui-small); color: #FAFAFA;">${xValue}</div></div>`;
+
+        for (const item of paramsArray) {
+          html += `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="width: 10px; height: 10px; border-radius: 2px; background-color: ${item.color};"></div>
+                <span style="font-size: var(--font-ui-small); color: #969696">${this.cleanPropertyName(item.seriesName)}</span>
+              </div>
+              <span style="font-size: var(--font-ui-small); color: #FAFAFA; font-variant-numeric: tabular-nums;">${item.value}</span>
+            </div>
+          `;
         }
-        return "";
+
+        return html;
       },
     };
   }
@@ -211,6 +254,7 @@ abstract class BaseEChartsRenderer {
         lineStyle: { color: `var(--bases-table-border-color)`, type: "dotted" },
       },
       axisLabel: {
+        show: this.config.showXAxisLabel,
         color: `var(--text-muted)`,
         fontFamily: "var(--font-interface)",
         fontSize: `var(--font-ui-smaller)`,
@@ -224,7 +268,7 @@ abstract class BaseEChartsRenderer {
         animation: false,
         type: "shadow",
         label: {
-          backgroundColor: this.config.color || "var(--interactive-accent)",
+          backgroundColor: this.config.color || CHART_COLORS[0],
           color: `var(--background-primary)`,
         },
         shadowStyle: {
@@ -241,6 +285,7 @@ abstract class BaseEChartsRenderer {
       min: this.config.yMin,
       max: this.config.yMax,
       axisLabel: {
+        show: this.config.showYAxisLabel,
         color: `var(--text-muted)`,
         fontFamily: "var(--font-interface)",
         fontSize: `var(--font-ui-smaller)`,
@@ -258,14 +303,14 @@ abstract class BaseEChartsRenderer {
 
   render(): EChartsType {
     const baseOption = this.getBaseOption();
-    const seriesOption = this.createSeriesOption();
+    const seriesOptions = this.createSeriesOptions();
 
     this.chartInstance = echarts.init(this.containerEl, undefined, {
       renderer: "svg",
     });
     this.chartInstance.setOption({
       ...baseOption,
-      series: [seriesOption],
+      series: seriesOptions,
     });
 
     return this.chartInstance;
@@ -286,16 +331,26 @@ abstract class BaseEChartsRenderer {
 }
 
 class BarChartRenderer extends BaseEChartsRenderer {
-  createSeriesOption(): unknown {
+  createSeriesOptions(): unknown[] {
     const configColor = this.config.color?.trim();
-    const accentColor =
-      configColor && configColor !== "" && configColor !== "undefined"
-        ? configColor
-        : "var(--interactive-accent)";
 
-    return {
-      data: this.data.values,
+    let colors: string[];
+
+    if (configColor && configColor !== "" && configColor !== "undefined") {
+      colors = this.data.seriesNames.map(() => configColor);
+    } else if (this.data.seriesNames.length === 1) {
+      colors = ["var(--interactive-accent)"];
+    } else {
+      colors = this.data.seriesNames.map(
+        (_, i) => CHART_COLORS[i % CHART_COLORS.length],
+      );
+    }
+
+    return this.data.seriesNames.map((name, index) => ({
+      name: name,
+      data: this.data.values[index],
       type: "bar",
+      stack: "total",
       animation: false,
       label: {
         show: this.config.showLabels,
@@ -307,35 +362,44 @@ class BarChartRenderer extends BaseEChartsRenderer {
         offset: [0, -4],
       },
       itemStyle: {
-        color: accentColor,
+        color: colors[index],
         borderRadius: [4, 4, 0, 0],
       },
       barWidth: `${this.config.barWidth || 15}%`,
       emphasis: {
         disabled: true,
       },
-    };
+    }));
   }
 }
 
 class LineChartRenderer extends BaseEChartsRenderer {
-  createSeriesOption(): unknown {
+  createSeriesOptions(): unknown[] {
     const configColor = this.config.color?.trim();
-    const accentColor =
-      configColor && configColor !== "" && configColor !== "undefined"
-        ? configColor
-        : "var(--interactive-accent)";
 
-    return {
-      data: this.data.values,
+    let colors: string[];
+
+    if (configColor && configColor !== "" && configColor !== "undefined") {
+      colors = this.data.seriesNames.map(() => configColor);
+    } else if (this.data.seriesNames.length === 1) {
+      colors = ["var(--interactive-accent)"];
+    } else {
+      colors = this.data.seriesNames.map(
+        (_, i) => CHART_COLORS[i % CHART_COLORS.length],
+      );
+    }
+
+    return this.data.seriesNames.map((name, index) => ({
+      name: name,
+      data: this.data.values[index],
       type: "line",
       animation: false,
       smooth: this.config.lineSmooth || false,
       symbol: "circle",
-      symbolSize: 6,
+      symbolSize: 6 * (this.config?.lineWidth ?? 1),
       lineStyle: {
-        color: accentColor,
-        width: 2,
+        color: colors[index],
+        width: this.config.lineWidth,
       },
       areaStyle: this.config.lineArea
         ? {
@@ -348,7 +412,7 @@ class LineChartRenderer extends BaseEChartsRenderer {
               colorStops: [
                 {
                   offset: 0,
-                  color: accentColor,
+                  color: colors[index],
                 },
                 {
                   offset: 1,
@@ -369,16 +433,16 @@ class LineChartRenderer extends BaseEChartsRenderer {
         offset: [0, -8],
       },
       itemStyle: {
-        color: accentColor,
-        borderColor: accentColor,
-        borderWidth: 2,
+        color: colors[index],
+        borderColor: colors[index],
+        borderWidth: 1,
       },
       emphasis: {
         disabled: true,
         scale: false,
         focus: "none",
       },
-    };
+    }));
   }
 }
 
@@ -433,12 +497,23 @@ export abstract class BaseChartView extends BasesView {
     if (groupedData.length === 0) return;
 
     const config = this.buildFullConfig();
+
     const extractedData = ChartDataExtractor.extract(
-      this.data as QueryData,
+      {
+        groupedData: this.data.groupedData,
+        properties: this.data.properties,
+      },
       config,
+      (id) =>
+        this.config?.getDisplayName(id as BasesPropertyId) ||
+        id.replace(/^(note\.|formula\.|file\.)/, ""),
     );
 
-    if (extractedData.labels.length === 0) return;
+    if (
+      extractedData.labels.length === 0 ||
+      extractedData.seriesNames.length === 0
+    )
+      return;
 
     this.renderChart(extractedData, config);
   }
@@ -446,14 +521,14 @@ export abstract class BaseChartView extends BasesView {
   private buildFullConfig(): ChartConfig {
     return {
       type: this.getChartType(),
-      xProp: String(this.config?.get("xAxis")),
-      yProp: String(this.config?.get("yAxis")),
+      xProp: this.config?.get("xAxis") as string | undefined,
       showLabels: this.config?.get("showLabels") === true,
       omitZero: this.config?.get("omitZero") === true,
       yMin: this.parseNumberConfig("yMin"),
       yMax: this.parseNumberConfig("yMax"),
       color: String(this.config?.get("color")),
       barWidth: this.parseNumberConfig("barWidth", 15),
+      lineWidth: this.parseNumberConfig("lineWidth", 1),
       lineSmooth: this.config?.get("lineSmooth") === true,
       lineArea: this.config?.get("lineArea") === true,
       showXLine:
@@ -463,6 +538,14 @@ export abstract class BaseChartView extends BasesView {
       showYLine:
         typeof this.config?.get("showYLine") === "boolean"
           ? this.config?.get("showYLine") === true
+          : true,
+      showXAxisLabel:
+        typeof this.config?.get("showXLabels") === "boolean"
+          ? this.config?.get("showXLabels") === true
+          : true,
+      showYAxisLabel:
+        typeof this.config?.get("showYLabels") === "boolean"
+          ? this.config?.get("showYLabels") === true
           : true,
       ...this.getAdditionalConfig(),
     };
@@ -507,7 +590,7 @@ export abstract class BaseChartView extends BasesView {
       const rect = container.getBoundingClientRect();
       const mouseX = clientX - rect.left;
 
-      // biome-ignore lint/suspicious/noExplicitAny: TODO: rewrite to public API
+      // biome-ignore lint/suspicious/noExplicitAny: TODO: use public API
       const gridModel = (this.chartInstance as any)
         ?.getModel()
         .getComponent("grid");
@@ -606,12 +689,19 @@ export class BarChartView extends BaseChartView {
             displayName: t("property_label"),
             placeholder: t("property_placeholder_category"),
             key: "xAxis",
+            default: "file.name",
           },
           {
             type: "toggle",
             displayName: t("show_line_label"),
             key: "showXLine",
             default: false,
+          },
+          {
+            type: "toggle",
+            displayName: t("show_labels_label"),
+            key: "showXLabels",
+            default: true,
           },
           {
             type: "toggle",
@@ -625,12 +715,6 @@ export class BarChartView extends BaseChartView {
         type: "group",
         displayName: t("y_axis_group"),
         items: [
-          {
-            type: "property",
-            displayName: t("property_label"),
-            placeholder: t("property_placeholder_value"),
-            key: "yAxis",
-          },
           {
             type: "text",
             displayName: t("max_label"),
@@ -649,6 +733,12 @@ export class BarChartView extends BaseChartView {
             type: "toggle",
             displayName: t("show_line_label"),
             key: "showYLine",
+            default: true,
+          },
+          {
+            type: "toggle",
+            displayName: t("show_labels_label"),
+            key: "showYLabels",
             default: true,
           },
         ],
@@ -706,12 +796,19 @@ export class LineChartView extends BaseChartView {
             displayName: t("property_label"),
             placeholder: t("property_placeholder_category"),
             key: "xAxis",
+            default: "file.name",
           },
           {
             type: "toggle",
             displayName: t("show_line_label"),
             key: "showXLine",
             default: false,
+          },
+          {
+            type: "toggle",
+            displayName: t("show_labels_label"),
+            key: "showXLabels",
+            default: true,
           },
           {
             type: "toggle",
@@ -725,12 +822,6 @@ export class LineChartView extends BaseChartView {
         type: "group",
         displayName: t("y_axis_group"),
         items: [
-          {
-            type: "property",
-            displayName: t("property_label"),
-            placeholder: t("property_placeholder_value"),
-            key: "yAxis",
-          },
           {
             type: "text",
             displayName: t("max_label"),
@@ -749,6 +840,12 @@ export class LineChartView extends BaseChartView {
             type: "toggle",
             displayName: t("show_line_label"),
             key: "showYLine",
+            default: true,
+          },
+          {
+            type: "toggle",
+            displayName: t("show_labels_label"),
+            key: "showYLabels",
             default: true,
           },
         ],
@@ -780,6 +877,15 @@ export class LineChartView extends BaseChartView {
             displayName: t("show_area_label"),
             key: "lineArea",
             default: false,
+          },
+          {
+            type: "slider",
+            displayName: t("line_width_label"),
+            min: 1,
+            max: 10,
+            step: 1,
+            key: "lineWidth",
+            default: 1,
           },
         ],
       },
