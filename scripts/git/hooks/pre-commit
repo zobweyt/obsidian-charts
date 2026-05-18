@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if ! npm run check -- --write --staged --files-ignore-unknown=true --no-errors-on-unmatched; then
+  exit 1
+fi
+
+if ! npm run tsc; then
+  exit 1
+fi
+
+git update-index --again

@@ -1,0 +1,10 @@
+{
+  "id": "bases-chart-layouts",
+  "name": "Bases Chart Layouts",
+  "version": "0.1.0-alpha",
+  "minAppVersion": "1.10.0",
+  "description": "Adds chart layouts to bases with bar and line types that feel native",
+  "author": "Nikita Gaziev",
+  "authorUrl": "https://github.com/zobweyt",
+  "isDesktopOnly": false
+}
