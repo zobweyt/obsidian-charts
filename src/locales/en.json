@@ -8,6 +8,7 @@
   "property_placeholder_category": "Select category property",
   "line_width_label": "Line width",
   "show_line_label": "Show line",
+  "show_leged": "Show legend",
   "omit_zero_values_label": "Omit zero values",
   "max_label": "Max",
   "min_label": "Min",

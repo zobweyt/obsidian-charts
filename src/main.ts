@@ -68,6 +68,7 @@ interface ChartConfig {
   lineArea?: boolean;
   showXLine: boolean;
   showYLine: boolean;
+  showLegend: boolean;
   showXAxisLabel: boolean;
   showYAxisLabel: boolean;
 }
@@ -177,17 +178,39 @@ abstract class BaseEChartsRenderer {
   abstract createSeriesOptions(): unknown[];
 
   protected getBaseOption(): Partial<EChartsOption> {
+    const showLegend = this.data.seriesNames.length > 1;
+
     return {
       backgroundColor: "transparent",
       animation: false,
+      legend: showLegend
+        ? {
+            show: this.config.showLegend,
+            textStyle: {
+              color: `var(--text-muted)`,
+              fontFamily: "var(--font-interface)",
+            },
+            pageTextStyle: {
+              color: `var(--text-muted)`,
+            },
+            type: "scroll",
+            itemGap: 48,
+            itemWidth: 12,
+            itemHeight: 12,
+            borderRadius: 2,
+            padding: 0,
+            bottom: 0,
+            orient: "horizontal",
+          }
+        : { show: false },
       tooltip: this.createTooltipOption(),
       grid: {
-        top: 40,
-        bottom: 40,
+        top: 30,
+        bottom: 30,
         left: 50,
         right: 20,
         backgroundColor: "transparent",
-        containLabel: false,
+        containLabel: true,
         show: true,
         borderWidth: 0,
       },
@@ -346,30 +369,36 @@ class BarChartRenderer extends BaseEChartsRenderer {
       );
     }
 
-    return this.data.seriesNames.map((name, index) => ({
-      name: name,
-      data: this.data.values[index],
-      type: "bar",
-      stack: "total",
-      animation: false,
-      label: {
-        show: this.config.showLabels,
-        position: "top",
-        color: `var(--text-muted)`,
-        fontFamily: "var(--font-interface)",
-        fontSize: `var(--font-ui-small)`,
-        formatter: (params: { value: number }) => params.value,
-        offset: [0, -4],
-      },
-      itemStyle: {
-        color: colors[index],
-        borderRadius: [4, 4, 0, 0],
-      },
-      barWidth: `${this.config.barWidth || 15}%`,
-      emphasis: {
-        disabled: true,
-      },
-    }));
+    const lastIndex = this.data.seriesNames.length - 1;
+
+    return this.data.seriesNames.map((name, index) => {
+      const isLast = index === lastIndex;
+
+      return {
+        name: name,
+        data: this.data.values[index],
+        type: "bar",
+        stack: "total",
+        animation: false,
+        label: {
+          show: isLast ? this.config.showLabels : false,
+          position: "top",
+          color: `var(--text-muted)`,
+          fontFamily: "var(--font-interface)",
+          fontSize: `var(--font-ui-small)`,
+          formatter: (params: { value: number }) => params.value,
+          offset: [0, -4],
+        },
+        itemStyle: {
+          color: colors[index],
+          borderRadius: isLast ? [4, 4, 0, 0] : [0, 0, 0, 0],
+        },
+        barWidth: `${this.config.barWidth || 15}%`,
+        emphasis: {
+          disabled: true,
+        },
+      };
+    });
   }
 }
 
@@ -430,7 +459,7 @@ class LineChartRenderer extends BaseEChartsRenderer {
         fontFamily: "var(--font-interface)",
         fontSize: `var(--font-ui-small)`,
         formatter: (params: { value: number }) => params.value,
-        offset: [0, -8],
+        offset: [0, -4],
       },
       itemStyle: {
         color: colors[index],
@@ -546,6 +575,10 @@ export abstract class BaseChartView extends BasesView {
       showYAxisLabel:
         typeof this.config?.get("showYLabels") === "boolean"
           ? this.config?.get("showYLabels") === true
+          : true,
+      showLegend:
+        typeof this.config?.get("showLegend") === "boolean"
+          ? this.config?.get("showLegend") === true
           : true,
       ...this.getAdditionalConfig(),
     };
@@ -755,6 +788,12 @@ export class BarChartView extends BaseChartView {
           },
           {
             type: "toggle",
+            displayName: t("show_leged"),
+            key: "showLegend",
+            default: true,
+          },
+          {
+            type: "toggle",
             displayName: t("show_labels_label"),
             key: "showLabels",
             default: false,
@@ -859,6 +898,12 @@ export class LineChartView extends BaseChartView {
             displayName: t("color_label"),
             key: "color",
             placeholder: "var(--interactive-accent)",
+          },
+          {
+            type: "toggle",
+            displayName: t("show_leged"),
+            key: "showLegend",
+            default: true,
           },
           {
             type: "toggle",
