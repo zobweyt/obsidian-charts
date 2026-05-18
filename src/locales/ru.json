@@ -1,0 +1,20 @@
+{
+  "bar_chart_name": "Столбчатая диаграмма",
+  "line_chart_name": "Линейная диаграмма",
+  "x_axis_group": "Ось X",
+  "y_axis_group": "Ось Y",
+  "style_group": "Стиль",
+  "property_label": "Свойство",
+  "property_placeholder_category": "Выберите свойство категории",
+  "property_placeholder_value": "Выберите свойство значения",
+  "show_line_label": "Показать линию",
+  "omit_zero_values_label": "Пропустить нулевые значения",
+  "max_label": "Макс.",
+  "min_label": "Мин.",
+  "auto_placeholder": "авто",
+  "color_label": "Цвет",
+  "show_labels_label": "Показывать подписи",
+  "bar_width_label": "Ширина столбца",
+  "smooth_curve_label": "Сглаженная кривая",
+  "show_area_label": "Показывать область под линией"
+}

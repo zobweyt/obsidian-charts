@@ -21,6 +21,7 @@ import {
   type QueryController,
   TFile,
 } from "obsidian";
+import { initLocale, t } from "./i18n";
 
 echarts.use([
   BarChart,
@@ -598,23 +599,23 @@ export class BarChartView extends BaseChartView {
     return [
       {
         type: "group",
-        displayName: "X axis",
+        displayName: t("x_axis_group"),
         items: [
           {
             type: "property",
-            displayName: "Property",
-            placeholder: "Select category property",
+            displayName: t("property_label"),
+            placeholder: t("property_placeholder_category"),
             key: "xAxis",
           },
           {
             type: "toggle",
-            displayName: "Show line",
+            displayName: t("show_line_label"),
             key: "showXLine",
             default: false,
           },
           {
             type: "toggle",
-            displayName: "Omit zero values",
+            displayName: t("omit_zero_values_label"),
             key: "omitZero",
             default: false,
           },
@@ -622,31 +623,31 @@ export class BarChartView extends BaseChartView {
       },
       {
         type: "group",
-        displayName: "Y axis",
+        displayName: t("y_axis_group"),
         items: [
           {
             type: "property",
-            displayName: "Property",
-            placeholder: "Select value property",
+            displayName: t("property_label"),
+            placeholder: t("property_placeholder_value"),
             key: "yAxis",
           },
           {
             type: "text",
-            displayName: "Max",
+            displayName: t("max_label"),
             key: "yMax",
             default: "",
-            placeholder: "auto",
+            placeholder: t("auto_placeholder"),
           },
           {
             type: "text",
-            displayName: "Min",
+            displayName: t("min_label"),
             key: "yMin",
             default: "",
-            placeholder: "auto",
+            placeholder: t("auto_placeholder"),
           },
           {
             type: "toggle",
-            displayName: "Show line",
+            displayName: t("show_line_label"),
             key: "showYLine",
             default: true,
           },
@@ -654,23 +655,23 @@ export class BarChartView extends BaseChartView {
       },
       {
         type: "group",
-        displayName: "Style",
+        displayName: t("style_group"),
         items: [
           {
             type: "text",
-            displayName: "Color",
+            displayName: t("color_label"),
             key: "color",
             placeholder: "var(--interactive-accent)",
           },
           {
             type: "toggle",
-            displayName: "Show labels",
+            displayName: t("show_labels_label"),
             key: "showLabels",
             default: false,
           },
           {
             type: "slider",
-            displayName: "Bar width",
+            displayName: t("bar_width_label"),
             min: 5,
             max: 95,
             step: 1,
@@ -698,23 +699,23 @@ export class LineChartView extends BaseChartView {
     return [
       {
         type: "group",
-        displayName: "X axis",
+        displayName: t("x_axis_group"),
         items: [
           {
             type: "property",
-            displayName: "Property",
-            placeholder: "Select category property",
+            displayName: t("property_label"),
+            placeholder: t("property_placeholder_category"),
             key: "xAxis",
           },
           {
             type: "toggle",
-            displayName: "Show line",
+            displayName: t("show_line_label"),
             key: "showXLine",
             default: false,
           },
           {
             type: "toggle",
-            displayName: "Omit zero values",
+            displayName: t("omit_zero_values_label"),
             key: "omitZero",
             default: false,
           },
@@ -722,31 +723,31 @@ export class LineChartView extends BaseChartView {
       },
       {
         type: "group",
-        displayName: "Y axis",
+        displayName: t("y_axis_group"),
         items: [
           {
             type: "property",
-            displayName: "Property",
-            placeholder: "Select value property",
+            displayName: t("property_label"),
+            placeholder: t("property_placeholder_value"),
             key: "yAxis",
           },
           {
             type: "text",
-            displayName: "Max",
+            displayName: t("max_label"),
             key: "yMax",
             default: "",
-            placeholder: "auto",
+            placeholder: t("auto_placeholder"),
           },
           {
             type: "text",
-            displayName: "Min",
+            displayName: t("min_label"),
             key: "yMin",
             default: "",
-            placeholder: "auto",
+            placeholder: t("auto_placeholder"),
           },
           {
             type: "toggle",
-            displayName: "Show line",
+            displayName: t("show_line_label"),
             key: "showYLine",
             default: true,
           },
@@ -754,29 +755,29 @@ export class LineChartView extends BaseChartView {
       },
       {
         type: "group",
-        displayName: "Style",
+        displayName: t("style_group"),
         items: [
           {
             type: "text",
-            displayName: "Color",
+            displayName: t("color_label"),
             key: "color",
             placeholder: "var(--interactive-accent)",
           },
           {
             type: "toggle",
-            displayName: "Show labels",
+            displayName: t("show_labels_label"),
             key: "showLabels",
             default: false,
           },
           {
             type: "toggle",
-            displayName: "Smooth curve",
+            displayName: t("smooth_curve_label"),
             key: "lineSmooth",
             default: false,
           },
           {
             type: "toggle",
-            displayName: "Show area under line",
+            displayName: t("show_area_label"),
             key: "lineArea",
             default: false,
           },
@@ -796,8 +797,10 @@ export class LineChartView extends BaseChartView {
 
 export default class BasesChartsPlugin extends Plugin {
   async onload() {
+    await initLocale();
+
     this.registerBasesView(BAR_VIEW_TYPE, {
-      name: "Bar Chart",
+      name: t("bar_chart_name"),
       icon: "lucide-bar-chart-3",
       factory: (controller, containerEl) =>
         new BarChartView(controller, containerEl),
@@ -805,7 +808,7 @@ export default class BasesChartsPlugin extends Plugin {
     });
 
     this.registerBasesView(LINE_VIEW_TYPE, {
-      name: "Line Chart",
+      name: t("line_chart_name"),
       icon: "lucide-line-chart",
       factory: (controller, containerEl) =>
         new LineChartView(controller, containerEl),
