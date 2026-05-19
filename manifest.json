@@ -1,9 +1,9 @@
 {
   "id": "bases-chart-layouts",
   "name": "Bases Chart Layouts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "minAppVersion": "1.10.0",
-  "description": "Adds fully customizable and theme adaptive chart layouts to Bases that feel native.",
+  "description": "Adds new layouts to bases: Bar Chart, Line Chart, and Pie Chart.",
   "author": "Nikita Gaziev",
   "authorUrl": "https://github.com/zobweyt",
   "isDesktopOnly": false
