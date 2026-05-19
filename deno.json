@@ -7,5 +7,14 @@
     "echarts": "npm:echarts@6.0.0",
     "obsidian": "npm:obsidian@1.11.0"
   },
+  "compilerOptions": {
+    "lib": [
+      "deno.window",
+      "deno.unstable",
+      "node",
+      "dom"
+    ],
+    "baseUrl": "."
+  },
   "nodeModulesDir": "auto"
 }

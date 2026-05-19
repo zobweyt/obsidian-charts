@@ -1,35 +1,36 @@
-import type {
+import {
   SeriesOption,
   XAXisOption,
   YAXisOption,
 } from "echarts/types/dist/shared";
-import { ChartRenderer } from "./ChartRenderer";
+import { CHART_COLORS, ChartRenderer } from "./ChartRenderer.ts";
 
 export class PieChartRenderer extends ChartRenderer {
-  protected createXAxisOption(): XAXisOption {
+  protected override createXAxisOption(): XAXisOption {
     return { show: false };
   }
 
-  protected createYAxisOption(): YAXisOption {
+  protected override createYAxisOption(): YAXisOption {
     return { show: false };
   }
 
-  protected createSingleSeries(
+  protected override createSingleSeries(
     name: string,
     index: number,
-    _color: string,
+    _: string,
   ): SeriesOption {
     const pieData = this.data.labels.map((label, i) => ({
       value: this.data.values[index]?.[i] ?? 0,
-      name: this.cleanPropertyName(label),
+      name: label,
     }));
 
     return {
-      name: this.cleanPropertyName(name),
+      name,
       type: "pie",
       radius: this.config.pieDonut ? ["40%", "70%"] : "70%",
       center: ["50%", "50%"],
       animation: false,
+      color: CHART_COLORS,
       data: pieData,
       label: {
         show: this.config.showLabels,
@@ -43,9 +44,8 @@ export class PieChartRenderer extends ChartRenderer {
       emphasis: {
         scale: false,
         itemStyle: {
-          shadowBlur: 0,
-          shadowOffsetX: 0,
-          shadowColor: "transparent",
+          color: "inherit",
+          opacity: 0.8,
         },
       },
     };

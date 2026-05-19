@@ -1,100 +1,16 @@
-import type { ECharts } from "echarts";
+import { ECharts } from "echarts";
 import {
-  type BasesPropertyOption,
-  type BasesQueryResult,
-  type BasesTextOption,
-  type BasesToggleOption,
+  BasesQueryResult,
   BasesView,
   Menu,
-  type QueryController,
+  QueryController,
   TFile,
 } from "obsidian";
-import { t } from "../i18n";
-import type {
+import {
   ChartConfig,
   ChartData,
   ChartRenderer,
-} from "../renderers/ChartRenderer";
-
-export const X_AXIS_PROPERTY_OPTION: BasesPropertyOption = {
-  type: "property",
-  displayName: t("property_label"),
-  placeholder: t("property_placeholder_category"),
-  key: "xAxis",
-  default: "file.name",
-};
-
-export const X_AXIS_SHOW_LINES_OPTION: BasesToggleOption = {
-  type: "toggle",
-  displayName: t("show_line_label"),
-  key: "showXLine",
-  default: false,
-};
-
-export const X_AXIS_SHOW_LABELS_OPTION: BasesToggleOption = {
-  type: "toggle",
-  displayName: t("show_labels_label"),
-  key: "showXLabels",
-  default: true,
-};
-
-export const X_AXIS_OMIT_ZERO_OPTION: BasesToggleOption = {
-  type: "toggle",
-  displayName: t("omit_zero_values_label"),
-  key: "omitZero",
-  default: false,
-};
-
-export const Y_AXIS_MAX_OPTION: BasesTextOption = {
-  type: "text",
-  displayName: t("max_label"),
-  key: "yMax",
-  default: "",
-  placeholder: t("auto_placeholder"),
-};
-
-export const Y_AXIS_MIN_OPTION: BasesTextOption = {
-  type: "text",
-  displayName: t("min_label"),
-  key: "yMin",
-  default: "",
-  placeholder: t("auto_placeholder"),
-};
-
-export const Y_AXIS_SHOW_LINE_OPTION: BasesToggleOption = {
-  type: "toggle",
-  displayName: t("show_line_label"),
-  key: "showYLine",
-  default: true,
-};
-
-export const Y_AXIS_SHOW_LABELS_OPTION: BasesToggleOption = {
-  type: "toggle",
-  displayName: t("show_labels_label"),
-  key: "showYLabels",
-  default: true,
-};
-
-export const STYLE_COLOR_OPTION: BasesTextOption = {
-  type: "text",
-  displayName: t("color_label"),
-  key: "color",
-  placeholder: "var(--interactive-accent)",
-};
-
-export const STYLE_SHOW_LEGEND_OPTION: BasesToggleOption = {
-  type: "toggle",
-  displayName: t("show_leged"),
-  key: "showLegend",
-  default: true,
-};
-
-export const STYLE_SHOW_LABELS_OPTION: BasesToggleOption = {
-  type: "toggle",
-  displayName: t("show_labels_label"),
-  key: "showLabels",
-  default: false,
-};
+} from "../renderers/ChartRenderer.ts";
 
 export abstract class ChartBasesView extends BasesView {
   protected chartInstance: ECharts | null = null;
@@ -102,7 +18,7 @@ export abstract class ChartBasesView extends BasesView {
   protected renderer: ChartRenderer | null = null;
   private resizeObserver: ResizeObserver | null = null;
 
-  abstract createRenderer(
+  protected abstract createRenderer(
     container: HTMLElement,
     data: ChartData,
     config: ChartConfig,
@@ -230,7 +146,7 @@ export abstract class ChartBasesView extends BasesView {
         : true,
       showLegend: typeof this.config?.get("showLegend") === "boolean"
         ? this.config?.get("showLegend") === true
-        : true,
+        : false,
       pieDonut: typeof this.config?.get("pieDonut") === "boolean"
         ? this.config?.get("pieDonut") === true
         : false,

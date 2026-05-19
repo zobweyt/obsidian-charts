@@ -1,5 +1,5 @@
 import * as echarts from "echarts";
-import type {
+import {
   EChartsOption,
   SeriesOption,
   TooltipOption,
@@ -7,7 +7,7 @@ import type {
   YAXisOption,
 } from "echarts/types/dist/shared";
 
-const CHART_COLORS = [
+export const CHART_COLORS = [
   "var(--color-blue)",
   "var(--color-green)",
   "var(--color-red)",
@@ -56,7 +56,7 @@ export abstract class ChartRenderer {
     this.config = config;
   }
 
-  public createSeriesOptions(): SeriesOption[] {
+  protected createSeriesOptions(): SeriesOption[] {
     const colors = this.getColors();
     return this.data.seriesNames.map((name, index) =>
       this.createSingleSeries(name, index, colors[index])
@@ -86,31 +86,27 @@ export abstract class ChartRenderer {
   }
 
   protected getBaseOption(): Partial<EChartsOption> {
-    const showLegend = this.data.seriesNames.length > 1;
-
     return {
       backgroundColor: "transparent",
       animation: false,
-      legend: showLegend
-        ? {
-          show: this.config.showLegend,
-          textStyle: {
-            color: `var(--text-muted)`,
-            fontFamily: "inherit",
-          },
-          pageTextStyle: {
-            color: `var(--text-muted)`,
-          },
-          type: "scroll",
-          itemGap: 48,
-          itemWidth: 12,
-          itemHeight: 12,
-          borderRadius: 2,
-          padding: 0,
-          bottom: 0,
-          orient: "horizontal",
-        }
-        : { show: false },
+      legend: {
+        show: this.config.showLegend,
+        textStyle: {
+          color: `var(--text-muted)`,
+          fontFamily: "inherit",
+        },
+        pageTextStyle: {
+          color: `var(--text-muted)`,
+        },
+        type: "scroll",
+        itemGap: 48,
+        itemWidth: 12,
+        itemHeight: 12,
+        borderRadius: 2,
+        padding: 0,
+        bottom: 0,
+        orient: "horizontal",
+      },
       tooltip: this.createTooltipOption(),
       grid: {
         top: 30,
@@ -125,10 +121,6 @@ export abstract class ChartRenderer {
       xAxis: this.createXAxisOption(),
       yAxis: this.createYAxisOption(),
     };
-  }
-
-  protected cleanPropertyName(propertyId: string): string {
-    return propertyId.replace(/^(note\.|formula\.|file\.)/, "");
   }
 
   protected createTooltipOption(): TooltipOption {
@@ -165,9 +157,9 @@ export abstract class ChartRenderer {
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
               <div style="display: flex; align-items: center; gap: 6px;">
                 <div style="width: 10px; height: 10px; border-radius: 2px; background-color: ${item.color};"></div>
-                <span style="font-size: var(--font-ui-small); font-family: var(--font-interface); color: #969696">${
-            this.cleanPropertyName(item.seriesName)
-          }</span>
+                <span style="font-size: var(--font-ui-small); font-family: var(--font-interface); color: #969696">
+                  ${item.seriesName}
+                </span>
               </div>
               <span style="font-size: var(--font-ui-small); font-family: var(--font-interface); color: #FAFAFA; font-variant-numeric: tabular-nums;">${item.value}</span>
             </div>
@@ -255,13 +247,5 @@ export abstract class ChartRenderer {
   dispose(): void {
     this.chartInstance?.dispose();
     this.chartInstance = null;
-  }
-
-  resize(): void {
-    this.chartInstance?.resize();
-  }
-
-  getChartInstance() {
-    return this.chartInstance;
   }
 }

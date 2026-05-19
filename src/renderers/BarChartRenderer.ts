@@ -1,8 +1,8 @@
-import type { SeriesOption } from "echarts/types/dist/shared";
-import { ChartRenderer } from "./ChartRenderer";
+import { SeriesOption } from "echarts/types/dist/shared";
+import { ChartRenderer } from "./ChartRenderer.ts";
 
 export class BarChartRenderer extends ChartRenderer {
-  protected createSingleSeries(
+  protected override createSingleSeries(
     name: string,
     index: number,
     color: string,

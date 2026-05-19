@@ -1,32 +1,37 @@
-import type { BasesViewRegistration } from "obsidian";
-import { t } from "../i18n";
-import { BarChartRenderer } from "../renderers/BarChartRenderer";
-import type {
-  ChartConfig,
-  ChartData,
-  ChartRenderer,
-} from "../renderers/ChartRenderer";
+import { BasesViewRegistration } from "obsidian";
+import { t } from "../i18n/index.ts";
 import {
-  ChartBasesView,
+  BAR_WIDTH_OPTION,
   STYLE_COLOR_OPTION,
   STYLE_SHOW_LABELS_OPTION,
   STYLE_SHOW_LEGEND_OPTION,
+} from "../options/style.ts";
+import {
   X_AXIS_OMIT_ZERO_OPTION,
   X_AXIS_PROPERTY_OPTION,
   X_AXIS_SHOW_LABELS_OPTION,
   X_AXIS_SHOW_LINES_OPTION,
   Y_AXIS_MAX_OPTION,
+} from "../options/x.ts";
+import {
   Y_AXIS_MIN_OPTION,
   Y_AXIS_SHOW_LABELS_OPTION,
   Y_AXIS_SHOW_LINE_OPTION,
-} from "./ChartBasesView";
+} from "../options/y.ts";
+import { BarChartRenderer } from "../renderers/BarChartRenderer.ts";
+import {
+  ChartConfig,
+  ChartData,
+  ChartRenderer,
+} from "../renderers/ChartRenderer.ts";
+import { ChartBasesView } from "./ChartBasesView.ts";
 
 const ID = "bar-chart";
 
 export class BarChartBasesView extends ChartBasesView {
-  readonly type = ID;
+  public readonly type = ID;
 
-  createRenderer(
+  protected override createRenderer(
     container: HTMLElement,
     data: ChartData,
     config: ChartConfig,
@@ -34,7 +39,7 @@ export class BarChartBasesView extends ChartBasesView {
     return new BarChartRenderer(container, data, config);
   }
 
-  static create() {
+  public static create() {
     return [
       ID,
       {
@@ -70,15 +75,7 @@ export class BarChartBasesView extends ChartBasesView {
               STYLE_COLOR_OPTION,
               STYLE_SHOW_LEGEND_OPTION,
               STYLE_SHOW_LABELS_OPTION,
-              {
-                type: "slider",
-                displayName: t("bar_width_label"),
-                min: 5,
-                max: 95,
-                step: 1,
-                key: "barWidth",
-                default: 15,
-              },
+              BAR_WIDTH_OPTION,
             ],
           },
         ],

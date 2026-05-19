@@ -88,3 +88,9 @@ Lint the code for potential errors:
 ```sh
 deno lint
 ```
+
+Type check:
+
+```sh
+deno check
+```

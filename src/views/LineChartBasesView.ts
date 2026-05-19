@@ -1,32 +1,43 @@
-import type { BasesViewRegistration } from "obsidian";
-import { t } from "../i18n";
-import type { ChartConfig, ChartData } from "../renderers/ChartRenderer";
-import { LineChartRenderer } from "../renderers/LineChartRenderer";
+import { BasesViewRegistration } from "obsidian";
+import { t } from "../i18n/index.ts";
+import { ChartConfig, ChartData } from "../renderers/ChartRenderer.ts";
+import { LineChartRenderer } from "../renderers/LineChartRenderer.ts";
+import { ChartBasesView } from "./ChartBasesView.ts";
 import {
-  ChartBasesView,
+  LINE_AREA_OPTION,
+  LINE_SMOOTH_OPTION,
+  LINE_WIDTH_OPTION,
   STYLE_COLOR_OPTION,
   STYLE_SHOW_LABELS_OPTION,
   STYLE_SHOW_LEGEND_OPTION,
+} from "../options/style.ts";
+import {
   X_AXIS_OMIT_ZERO_OPTION,
   X_AXIS_PROPERTY_OPTION,
   X_AXIS_SHOW_LABELS_OPTION,
   X_AXIS_SHOW_LINES_OPTION,
   Y_AXIS_MAX_OPTION,
+} from "../options/x.ts";
+import {
   Y_AXIS_MIN_OPTION,
   Y_AXIS_SHOW_LABELS_OPTION,
   Y_AXIS_SHOW_LINE_OPTION,
-} from "./ChartBasesView";
+} from "../options/y.ts";
 
 const ID = "line-chart";
 
 export class LineChartBasesView extends ChartBasesView {
-  readonly type = ID;
+  public readonly type = ID;
 
-  createRenderer(container: HTMLElement, data: ChartData, config: ChartConfig) {
+  protected override createRenderer(
+    container: HTMLElement,
+    data: ChartData,
+    config: ChartConfig,
+  ) {
     return new LineChartRenderer(container, data, config);
   }
 
-  static create() {
+  public static create() {
     return [
       ID,
       {
@@ -34,7 +45,6 @@ export class LineChartBasesView extends ChartBasesView {
         icon: "lucide-line-chart",
         factory: (controller, containerEl) =>
           new LineChartBasesView(controller, containerEl),
-
         options: () => [
           {
             type: "group",
@@ -63,27 +73,9 @@ export class LineChartBasesView extends ChartBasesView {
               STYLE_COLOR_OPTION,
               STYLE_SHOW_LEGEND_OPTION,
               STYLE_SHOW_LABELS_OPTION,
-              {
-                type: "toggle",
-                displayName: t("smooth_curve_label"),
-                key: "lineSmooth",
-                default: false,
-              },
-              {
-                type: "toggle",
-                displayName: t("show_area_label"),
-                key: "lineArea",
-                default: false,
-              },
-              {
-                type: "slider",
-                displayName: t("line_width_label"),
-                min: 1,
-                max: 10,
-                step: 1,
-                key: "lineWidth",
-                default: 1,
-              },
+              LINE_SMOOTH_OPTION,
+              LINE_AREA_OPTION,
+              LINE_WIDTH_OPTION,
             ],
           },
         ],

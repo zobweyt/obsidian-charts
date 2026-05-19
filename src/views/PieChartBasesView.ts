@@ -1,30 +1,28 @@
-import type { BasesToggleOption, BasesViewRegistration } from "obsidian";
-import { t } from "../i18n";
-import type { ChartConfig, ChartData } from "../renderers/ChartRenderer";
-import { PieChartRenderer } from "../renderers/PieChartRenderer";
+import { BasesViewRegistration } from "obsidian";
+import { t } from "../i18n/index.ts";
+import { ChartConfig, ChartData } from "../renderers/ChartRenderer.ts";
+import { PieChartRenderer } from "../renderers/PieChartRenderer.ts";
+import { ChartBasesView } from "./ChartBasesView.ts";
 import {
-  ChartBasesView,
+  PIE_DONUT_OPTION,
   STYLE_SHOW_LABELS_OPTION,
   STYLE_SHOW_LEGEND_OPTION,
-} from "./ChartBasesView";
-
-export const PIE_DONUT_OPTION: BasesToggleOption = {
-  type: "toggle",
-  displayName: t("pie_donut"),
-  key: "pieDonut",
-  default: false,
-};
+} from "../options/style.ts";
 
 const ID = "pie-chart";
 
 export class PieChartBasesView extends ChartBasesView {
   readonly type = ID;
 
-  createRenderer(container: HTMLElement, data: ChartData, config: ChartConfig) {
+  protected override createRenderer(
+    container: HTMLElement,
+    data: ChartData,
+    config: ChartConfig,
+  ) {
     return new PieChartRenderer(container, data, config);
   }
 
-  static create() {
+  public static create() {
     return [
       ID,
       {
@@ -32,7 +30,6 @@ export class PieChartBasesView extends ChartBasesView {
         icon: "lucide-pie-chart",
         factory: (controller, containerEl) =>
           new PieChartBasesView(controller, containerEl),
-
         options: () => [
           {
             type: "group",
