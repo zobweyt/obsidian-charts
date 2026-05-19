@@ -1,6 +1,8 @@
 {
   "bar_chart_name": "Bar Chart",
   "line_chart_name": "Line Chart",
+  "pie_chart_name": "Pie Chart",
+  "pie_donut": "Donut",
   "x_axis_group": "X axis",
   "y_axis_group": "Y axis",
   "style_group": "Style",

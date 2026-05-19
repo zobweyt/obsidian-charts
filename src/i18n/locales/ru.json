@@ -1,6 +1,8 @@
 {
   "bar_chart_name": "Столбчатая диаграмма",
   "line_chart_name": "Линейная диаграмма",
+  "pie_chart_name": "Круговая диаграмма",
+  "pie_donut": "Отверстие",
   "x_axis_group": "Ось X",
   "y_axis_group": "Ось Y",
   "style_group": "Стиль",
