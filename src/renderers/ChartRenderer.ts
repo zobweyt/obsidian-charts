@@ -232,9 +232,15 @@ export abstract class ChartRenderer {
     const baseOption = this.getBaseOption();
     const seriesOptions = this.createSeriesOptions();
 
+    const width = this.containerEl.clientWidth || undefined;
+    const height = this.containerEl.clientHeight || 320;
+
     this.chartInstance = echarts.init(this.containerEl, undefined, {
       renderer: "svg",
+      width: width,
+      height: height,
     });
+
     this.chartInstance.setOption({
       ...baseOption,
       series: seriesOptions,

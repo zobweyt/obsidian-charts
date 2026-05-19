@@ -257,6 +257,8 @@ export abstract class ChartBasesView extends BasesView {
   }
 
   private renderChart(data: ChartData, config: ChartConfig): void {
+    this.containerEl.empty();
+
     const chartContainer = this.containerEl.createDiv();
     chartContainer.style.width = "100%";
     chartContainer.style.height = "100%";
@@ -264,11 +266,24 @@ export abstract class ChartBasesView extends BasesView {
 
     this.renderer = this.createRenderer(chartContainer, data, config);
     this.chartInstance = this.renderer.render();
-
     this.setupInteractions(chartContainer, data.filePaths);
 
-    this.resizeObserver = new ResizeObserver(() => this.renderer?.resize());
-    this.resizeObserver.observe(chartContainer);
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+
+        if (width === 0 || height === 0) continue;
+
+        if (this.chartInstance) {
+          this.chartInstance.resize({
+            width: width,
+            height: height,
+          });
+        }
+      }
+    });
+
+    this.resizeObserver.observe(this.containerEl);
   }
 
   private setupInteractions(container: HTMLElement, filePaths: string[]): void {
@@ -429,7 +444,7 @@ export abstract class ChartBasesView extends BasesView {
     this.containerEl.empty();
   }
 
-  async onClose() {
+  override onunload() {
     this.cleanup();
   }
 }
