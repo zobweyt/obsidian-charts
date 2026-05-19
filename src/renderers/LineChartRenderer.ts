@@ -21,25 +21,25 @@ export class LineChartRenderer extends ChartRenderer {
       },
       areaStyle: this.config.lineArea
         ? {
-            color: {
-              type: "linear",
-              x: 0,
-              y: 0,
-              x2: 0,
-              y2: 1,
-              colorStops: [
-                {
-                  offset: 0,
-                  color: color,
-                },
-                {
-                  offset: 1,
-                  color: "rgba(0, 0, 0, 0)",
-                },
-              ],
-            },
-            opacity: 0.25,
-          }
+          color: {
+            type: "linear",
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              {
+                offset: 0,
+                color: color,
+              },
+              {
+                offset: 1,
+                color: "rgba(0, 0, 0, 0)",
+              },
+            ],
+          },
+          opacity: 0.25,
+        }
         : undefined,
       label: {
         show: this.config.showLabels,

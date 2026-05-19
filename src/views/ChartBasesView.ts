@@ -126,7 +126,7 @@ export abstract class ChartBasesView extends BasesView {
     const values: number[][] = seriesNames.map(() => []);
 
     const displayNames = seriesNames.map((name) =>
-      this.config.getDisplayName(name),
+      this.config.getDisplayName(name)
     );
 
     for (const group of groupedData) {
@@ -138,10 +138,9 @@ export abstract class ChartBasesView extends BasesView {
             String(config.xProp) as BasesQueryResult["properties"][0],
           );
           if (xObj) {
-            const extractedVal =
-              typeof xObj.toString === "function"
-                ? xObj.toString()
-                : String((xObj as { value?: unknown }).value || xObj);
+            const extractedVal = typeof xObj.toString === "function"
+              ? xObj.toString()
+              : String((xObj as { value?: unknown }).value || xObj);
             if (extractedVal && extractedVal !== "[object Object]") {
               xVal = extractedVal;
             }
@@ -157,10 +156,9 @@ export abstract class ChartBasesView extends BasesView {
           let yVal = 0;
 
           if (yObj) {
-            const rawVal =
-              (yObj as { value?: unknown }).value !== undefined
-                ? (yObj as { value?: unknown }).value
-                : yObj;
+            const rawVal = (yObj as { value?: unknown }).value !== undefined
+              ? (yObj as { value?: unknown }).value
+              : yObj;
             yVal = Number(rawVal);
             if (Number.isNaN(yVal)) yVal = 0;
           }
@@ -199,8 +197,9 @@ export abstract class ChartBasesView extends BasesView {
     if (
       extractedData.labels.length === 0 ||
       extractedData.seriesNames.length === 0
-    )
+    ) {
       return;
+    }
 
     this.renderChart(extractedData, config);
   }
@@ -217,30 +216,24 @@ export abstract class ChartBasesView extends BasesView {
       lineWidth: this.parseNumberConfig("lineWidth", 1),
       lineSmooth: this.config?.get("lineSmooth") === true,
       lineArea: this.config?.get("lineArea") === true,
-      showXLine:
-        typeof this.config?.get("showXLine") === "boolean"
-          ? this.config?.get("showXLine") === true
-          : false,
-      showYLine:
-        typeof this.config?.get("showYLine") === "boolean"
-          ? this.config?.get("showYLine") === true
-          : true,
-      showXAxisLabel:
-        typeof this.config?.get("showXLabels") === "boolean"
-          ? this.config?.get("showXLabels") === true
-          : true,
-      showYAxisLabel:
-        typeof this.config?.get("showYLabels") === "boolean"
-          ? this.config?.get("showYLabels") === true
-          : true,
-      showLegend:
-        typeof this.config?.get("showLegend") === "boolean"
-          ? this.config?.get("showLegend") === true
-          : true,
-      pieDonut:
-        typeof this.config?.get("pieDonut") === "boolean"
-          ? this.config?.get("pieDonut") === true
-          : false,
+      showXLine: typeof this.config?.get("showXLine") === "boolean"
+        ? this.config?.get("showXLine") === true
+        : false,
+      showYLine: typeof this.config?.get("showYLine") === "boolean"
+        ? this.config?.get("showYLine") === true
+        : true,
+      showXAxisLabel: typeof this.config?.get("showXLabels") === "boolean"
+        ? this.config?.get("showXLabels") === true
+        : true,
+      showYAxisLabel: typeof this.config?.get("showYLabels") === "boolean"
+        ? this.config?.get("showYLabels") === true
+        : true,
+      showLegend: typeof this.config?.get("showLegend") === "boolean"
+        ? this.config?.get("showLegend") === true
+        : true,
+      pieDonut: typeof this.config?.get("pieDonut") === "boolean"
+        ? this.config?.get("pieDonut") === true
+        : false,
     };
   }
 

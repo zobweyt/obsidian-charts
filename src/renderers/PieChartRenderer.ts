@@ -17,7 +17,7 @@ export class PieChartRenderer extends ChartRenderer {
   protected createSingleSeries(
     name: string,
     index: number,
-    color: string,
+    _color: string,
   ): SeriesOption {
     const pieData = this.data.labels.map((label, i) => ({
       value: this.data.values[index]?.[i] ?? 0,

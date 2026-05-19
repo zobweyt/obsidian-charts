@@ -1,0 +1,11 @@
+{
+  "tasks": {
+    "build": "deno run -A npm:esbuild@0.25.0 ./src/main.ts --bundle --minify --platform=node --external:obsidian --format=cjs --outfile=./dist/main.js",
+    "watch": "deno run -A npm:esbuild@0.25.0 ./src/main.ts --bundle --minify --platform=node --external:obsidian --format=cjs --outfile=./dist/main.js --watch"
+  },
+  "imports": {
+    "echarts": "npm:echarts@6.0.0",
+    "obsidian": "npm:obsidian@1.11.0"
+  },
+  "nodeModulesDir": "auto"
+}

@@ -59,7 +59,7 @@ export abstract class ChartRenderer {
   public createSeriesOptions(): SeriesOption[] {
     const colors = this.getColors();
     return this.data.seriesNames.map((name, index) =>
-      this.createSingleSeries(name, index, colors[index]),
+      this.createSingleSeries(name, index, colors[index])
     );
   }
 
@@ -93,23 +93,23 @@ export abstract class ChartRenderer {
       animation: false,
       legend: showLegend
         ? {
-            show: this.config.showLegend,
-            textStyle: {
-              color: `var(--text-muted)`,
-              fontFamily: "inherit",
-            },
-            pageTextStyle: {
-              color: `var(--text-muted)`,
-            },
-            type: "scroll",
-            itemGap: 48,
-            itemWidth: 12,
-            itemHeight: 12,
-            borderRadius: 2,
-            padding: 0,
-            bottom: 0,
-            orient: "horizontal",
-          }
+          show: this.config.showLegend,
+          textStyle: {
+            color: `var(--text-muted)`,
+            fontFamily: "inherit",
+          },
+          pageTextStyle: {
+            color: `var(--text-muted)`,
+          },
+          type: "scroll",
+          itemGap: 48,
+          itemWidth: 12,
+          itemHeight: 12,
+          borderRadius: 2,
+          padding: 0,
+          bottom: 0,
+          orient: "horizontal",
+        }
         : { show: false },
       tooltip: this.createTooltipOption(),
       grid: {
@@ -157,14 +157,17 @@ export abstract class ChartRenderer {
 
         if (!paramsArray || paramsArray.length === 0) return "";
 
-        let html = `<div style="display: flex; font-family: var(--font-interface); flex-direction: column; justify-content: space-between; gap: 4px;"><div style="font-size: var(--font-ui-small); color: #FAFAFA;">${xValue}</div></div>`;
+        let html =
+          `<div style="display: flex; font-family: var(--font-interface); flex-direction: column; justify-content: space-between; gap: 4px;"><div style="font-size: var(--font-ui-small); color: #FAFAFA;">${xValue}</div></div>`;
 
         for (const item of paramsArray) {
           html += `
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
               <div style="display: flex; align-items: center; gap: 6px;">
                 <div style="width: 10px; height: 10px; border-radius: 2px; background-color: ${item.color};"></div>
-                <span style="font-size: var(--font-ui-small); font-family: var(--font-interface); color: #969696">${this.cleanPropertyName(item.seriesName)}</span>
+                <span style="font-size: var(--font-ui-small); font-family: var(--font-interface); color: #969696">${
+            this.cleanPropertyName(item.seriesName)
+          }</span>
               </div>
               <span style="font-size: var(--font-ui-small); font-family: var(--font-interface); color: #FAFAFA; font-variant-numeric: tabular-nums;">${item.value}</span>
             </div>
