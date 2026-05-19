@@ -1,7 +1,7 @@
 {
   "id": "bases-chart-layouts",
   "name": "Bases Chart Layouts",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0-alpha.0",
   "minAppVersion": "1.10.0",
   "description": "Adds fully customizable and theme adaptive chart layouts to Obsidian Bases that feel native.",
   "author": "Nikita Gaziev",
