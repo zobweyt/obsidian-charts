@@ -188,7 +188,7 @@ abstract class BaseEChartsRenderer {
             show: this.config.showLegend,
             textStyle: {
               color: `var(--text-muted)`,
-              fontFamily: "var(--font-interface)",
+              fontFamily: "inherit",
             },
             pageTextStyle: {
               color: `var(--text-muted)`,
@@ -207,8 +207,8 @@ abstract class BaseEChartsRenderer {
       grid: {
         top: 30,
         bottom: 30,
-        left: 50,
-        right: 20,
+        left: 30,
+        right: 30,
         backgroundColor: "transparent",
         containLabel: true,
         show: true,
@@ -249,16 +249,16 @@ abstract class BaseEChartsRenderer {
 
         if (!paramsArray || paramsArray.length === 0) return "";
 
-        let html = `<div style="display: flex; flex-directon: column; align-items: center; justify-content: space-between; gap: 4px;"><div style="font-size: var(--font-ui-small); color: #FAFAFA;">${xValue}</div></div>`;
+        let html = `<div style="display: flex; font-family: var(--font-interface); flex-directon: column; align-items: center; justify-content: space-between; gap: 4px;"><div style="font-size: var(--font-ui-small); color: #FAFAFA;">${xValue}</div></div>`;
 
         for (const item of paramsArray) {
           html += `
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
               <div style="display: flex; align-items: center; gap: 6px;">
                 <div style="width: 10px; height: 10px; border-radius: 2px; background-color: ${item.color};"></div>
-                <span style="font-size: var(--font-ui-small); color: #969696">${this.cleanPropertyName(item.seriesName)}</span>
+                <span style="font-size: var(--font-ui-small); font-family: var(--font-interface); color: #969696">${this.cleanPropertyName(item.seriesName)}</span>
               </div>
-              <span style="font-size: var(--font-ui-small); color: #FAFAFA; font-variant-numeric: tabular-nums;">${item.value}</span>
+              <span style="font-size: var(--font-ui-small); font-family: var(--font-interface); color: #FAFAFA; font-variant-numeric: tabular-nums;">${item.value}</span>
             </div>
           `;
         }
@@ -279,7 +279,7 @@ abstract class BaseEChartsRenderer {
       axisLabel: {
         show: this.config.showXAxisLabel,
         color: `var(--text-muted)`,
-        fontFamily: "var(--font-interface)",
+        fontFamily: "inherit",
         fontSize: `var(--font-ui-smaller)`,
       },
       axisLine: {
@@ -310,7 +310,7 @@ abstract class BaseEChartsRenderer {
       axisLabel: {
         show: this.config.showYAxisLabel,
         color: `var(--text-muted)`,
-        fontFamily: "var(--font-interface)",
+        fontFamily: "inherit",
         fontSize: `var(--font-ui-smaller)`,
       },
       axisLine: {
@@ -384,7 +384,7 @@ class BarChartRenderer extends BaseEChartsRenderer {
           show: isLast ? this.config.showLabels : false,
           position: "top",
           color: `var(--text-muted)`,
-          fontFamily: "var(--font-interface)",
+          fontFamily: "inherit",
           fontSize: `var(--font-ui-small)`,
           formatter: (params: { value: number }) => params.value,
           offset: [0, -4],
@@ -456,7 +456,7 @@ class LineChartRenderer extends BaseEChartsRenderer {
         show: this.config.showLabels,
         position: "top",
         color: `var(--text-muted)`,
-        fontFamily: "var(--font-interface)",
+        fontFamily: "inherit",
         fontSize: `var(--font-ui-small)`,
         formatter: (params: { value: number }) => params.value,
         offset: [0, -4],
@@ -517,6 +517,7 @@ export abstract class BaseChartView extends BasesView {
     this.containerEl.style.width = "100%";
     this.containerEl.style.height = "100%";
     this.containerEl.style.position = "relative";
+    this.containerEl.style.minHeight = "320px";
   }
 
   override onDataUpdated(): void {
@@ -600,7 +601,7 @@ export abstract class BaseChartView extends BasesView {
     const chartContainer = this.containerEl.createDiv();
     chartContainer.style.width = "100%";
     chartContainer.style.height = "100%";
-    chartContainer.style.cursor = "pointer";
+    chartContainer.style.minHeight = "320px";
 
     this.renderer = ChartRendererFactory.createRenderer(
       chartContainer,
