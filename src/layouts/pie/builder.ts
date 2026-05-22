@@ -4,7 +4,8 @@ import { pieHoleRadius } from "./options.ts";
 
 export class PieChartBuilder extends PolarChartBuilder {
   protected override setupChart() {
-    const holeRadius = (this.config.get(pieHoleRadius.key) ?? pieHoleRadius.default) as number;
+    const holeRadius =
+      (this.config.get(pieHoleRadius.key) ?? pieHoleRadius.default) as number;
 
     this.option.series = this.properties.map((property, i) => {
       const name = this.config.getDisplayName(property);
@@ -15,10 +16,11 @@ export class PieChartBuilder extends PolarChartBuilder {
 
       const step = (70 - holeRadius) / this.properties.length;
       const outer = 70 - i * step;
-      const inner = outer - step + (holeRadius * (1 - i / this.properties.length));
-      
-      const radius = holeRadius === 0 && i === 0 
-        ? `${outer}%` 
+      const inner = outer - step +
+        (holeRadius * (1 - i / this.properties.length));
+
+      const radius = holeRadius === 0 && i === 0
+        ? `${outer}%`
         : [`${inner}%`, `${outer}%`];
 
       return {
@@ -30,7 +32,8 @@ export class PieChartBuilder extends PolarChartBuilder {
         label: {
           show: i === 0 && this.properties.length > 1
             ? false
-            : (this.config.get(showLabels.key) ?? showLabels.default) as boolean,
+            : (this.config.get(showLabels.key) ??
+              showLabels.default) as boolean,
           position: "outside",
           color: "var(--text-muted)",
           fontFamily: "inherit",

@@ -1,7 +1,6 @@
 import { BasesPropertyId } from "obsidian";
 import { BaseChartBuilder } from "../base/builder.ts";
 import {
-autoRotateXLabels,
   referenceLineColor,
   referenceLineStyle,
   referenceLineValue,
@@ -28,7 +27,7 @@ export abstract class CartesianChartBuilder extends BaseChartBuilder {
       borderWidth: 0,
     };
 
-    const rotationValue = 
+    const rotationValue =
       (this.config.get(rotateXLabels.key) ?? rotateXLabels.default) as number;
 
     const xAxisProp =
@@ -52,7 +51,7 @@ export abstract class CartesianChartBuilder extends BaseChartBuilder {
         color: "var(--text-muted)",
         fontFamily: "inherit",
         fontSize: "var(--font-ui-smaller)",
-        rotate: rotationValue, 
+        rotate: rotationValue,
         hideOverlap: true,
       },
       axisLine: {
@@ -97,8 +96,13 @@ export abstract class CartesianChartBuilder extends BaseChartBuilder {
     const value = Number(rawValue);
     if (isNaN(value)) return undefined;
 
-    const color = (this.config.get(referenceLineColor.key) || "var(--text-error)") as string;
-    const style = (this.config.get(referenceLineStyle.key) ?? referenceLineStyle.default) as "solid" | "dashed" | "dotted";
+    const color = (this.config.get(referenceLineColor.key) ||
+      "var(--text-error)") as string;
+    const style =
+      (this.config.get(referenceLineStyle.key) ?? referenceLineStyle.default) as
+        | "solid"
+        | "dashed"
+        | "dotted";
 
     return {
       symbol: "none",
@@ -117,9 +121,9 @@ export abstract class CartesianChartBuilder extends BaseChartBuilder {
             formatter: `${value}`,
             color: color,
             fontSize: "var(--font-ui-smaller)",
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
   }
 }

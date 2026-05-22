@@ -74,7 +74,7 @@ export const referenceLineColor = {
   type: "text",
   displayName: t("reference_line_color_label"),
   placeholder: t("auto_placeholder"),
-  shouldHide: (config) => !config.get(referenceLineValue.key)
+  shouldHide: (config) => !config.get(referenceLineValue.key),
 } satisfies ViewOption;
 
 export const referenceLineStyle = {
@@ -87,7 +87,7 @@ export const referenceLineStyle = {
     "dashed": t("dashed"),
     "dotted": t("dotted"),
   },
-  shouldHide: (config) => !config.get(referenceLineValue.key)
+  shouldHide: (config) => !config.get(referenceLineValue.key),
 } satisfies ViewOption;
 
 export const x = {
@@ -111,7 +111,6 @@ export const y = {
     showYLabels,
   ],
 } satisfies ViewOption;
-
 
 export const referenceLine = {
   type: "group",

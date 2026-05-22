@@ -1,7 +1,25 @@
 # Obsidian Bases Chart Layouts
 
-This plugin adds new layouts to bases: **Bar Chart**, **Line Chart**, and **Pie
-Chart**.
+This plugin adds new highly customizable and native-feeling layouts to bases:
+**Bar Chart**, **Line Chart**, and **Pie Chart**.
+
+## Features
+
+- **Works Like Native Obsidian**: Supports right-click menus, middle-mouse
+  clicks, and `Cmd/Ctrl + Click` to open links in a new tab.
+- **Clean Styles**: Change colors, turn on smooth animations, hide zero values,
+  and show or hide chart titles and legends.
+- **X-Axis Settings**: Choose any property. Hide or show the bottom line and
+  text, and tilt labels from -90° to 90° so they fit.
+- **Y-Axis Settings**: Set your own minimum and maximum height limits, or let it
+  scale automatically. Hide or show the side line and numbers.
+- **Reference Lines**: Draw a horizontal line across Bar and Line charts at any
+  number. Change its color and style (solid, dashed, or dotted).
+- **Bar Settings**: Make bars skinnier or wider using a simple slider.
+- **Line Settings**: Make lines smooth or straight, change their thickness, and
+  fill the space underneath with color.
+- **Pie Settings**: Turn your pie chart into a donut chart by cutting a hole in
+  the middle.
 
 ## Usage Guide
 
