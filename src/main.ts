@@ -1,12 +1,12 @@
 import { Plugin } from "obsidian";
-import { BarChartBasesView } from "./views/BarChartBasesView.ts";
-import { LineChartBasesView } from "./views/LineChartBasesView.ts";
-import { PieChartBasesView } from "./views/PieChartBasesView.ts";
+import { BAR_CHART_VIEW } from "./layouts/bar/index.ts";
+import { LINE_CHART_VIEW } from "./layouts/line/index.ts";
+import { PIE_CHART_VIEW } from "./layouts/pie/index.ts";
 
 export default class BasesChartLayoutsPlugin extends Plugin {
-  public override onload() {
-    this.registerBasesView(...BarChartBasesView.create());
-    this.registerBasesView(...LineChartBasesView.create());
-    this.registerBasesView(...PieChartBasesView.create());
+  override onload() {
+    this.registerBasesView(BAR_CHART_VIEW.id, BAR_CHART_VIEW.registration);
+    this.registerBasesView(LINE_CHART_VIEW.id, LINE_CHART_VIEW.registration);
+    this.registerBasesView(PIE_CHART_VIEW.id, PIE_CHART_VIEW.registration);
   }
 }

@@ -1,0 +1,54 @@
+filters:
+  or:
+    - file.hasProperty("mood")
+    - file.hasProperty("sleep")
+views:
+  - type: bar-chart
+    name: Bar Chart
+    order:
+      - sleep
+      - mood
+    showXLine: true
+    omitZero: false
+    xAxis: file.basename
+    showLabels: true
+    barWidth: 20
+    showLegend: true
+    showYLine: true
+    color: ""
+    yMax: ""
+    yMin: ""
+    animation: true
+    showXLabels: true
+    rotateXLabels: 0
+  - type: line-chart
+    name: Line Chart
+    order:
+      - mood
+      - sleep
+    showXLine: false
+    omitZero: false
+    xAxis: file.basename
+    lineSmooth: true
+    lineArea: true
+    showLabels: true
+    showLegend: true
+    lineWidth: 1
+    yMax: "10"
+    animation: true
+    showXLabels: true
+    rotateXLabels: 0
+  - type: pie-chart
+    name: Pie Chart
+    order:
+      - mood
+      - sleep
+    showXLine: false
+    omitZero: true
+    xAxis: file.basename
+    showLegend: true
+    showLabels: true
+    pieDonut: true
+    color: ""
+    animation: true
+    pieHoleRadius: 10

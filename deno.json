@@ -1,19 +1,19 @@
 {
   "tasks": {
-    "build": "deno run -A npm:esbuild@0.25.0 ./src/main.ts --bundle --minify --platform=node --external:obsidian --format=cjs --outfile=./dist/main.js",
-    "watch": "deno run -A npm:esbuild@0.25.0 ./src/main.ts --bundle --minify --platform=node --external:obsidian --format=cjs --outfile=./dist/main.js --watch"
+    "build": "deno run -A ./scripts/build.ts",
+    "watch": "deno run -A ./scripts/build.ts --watch"
   },
   "imports": {
     "echarts": "npm:echarts@6.0.0",
     "obsidian": "npm:obsidian@1.11.0"
   },
+  "scopes": {
+    "./scripts/": {
+      "esbuild": "npm:esbuild@0.28.0"
+    }
+  },
   "compilerOptions": {
-    "lib": [
-      "deno.window",
-      "deno.unstable",
-      "node",
-      "dom"
-    ],
+    "lib": ["deno.ns", "node", "dom"],
     "baseUrl": "."
   },
   "nodeModulesDir": "auto"
