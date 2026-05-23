@@ -67,8 +67,8 @@ export abstract class BaseChartView extends BasesView {
     if (!(file instanceof TFile)) return;
 
     event.preventDefault();
-    const menu = Menu.forEvent(event);
-    this.app.workspace.handleLinkContextMenu(menu, file.path, "");
+    const menu = new Menu();
+    this.app.workspace.handleLinkContextMenu(menu, file.basename, file.path);
     menu.showAtMouseEvent(event);
   }
 
