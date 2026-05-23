@@ -1,6 +1,6 @@
 {
-  "id": "bases-chart-layouts",
-  "name": "Bases Chart Layouts",
+  "id": "charts",
+  "name": "Charts for Bases",
   "version": "0.3.6",
   "minAppVersion": "1.10.0",
   "description": "Adds chart layouts to bases so you can display notes as interactive bar, line, or pie charts.",

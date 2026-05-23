@@ -1,4 +1,4 @@
-# Obsidian Bases Chart Layouts
+# Obsidian Charts for Bases
 
 Adds chart layouts to bases so you can display notes as interactive bar, line,
 or pie charts.
