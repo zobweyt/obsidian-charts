@@ -2,8 +2,10 @@ import { BasesPropertyId } from "obsidian";
 import { BaseChartBuilder } from "../base/builder.ts";
 import {
   referenceLineColor,
+  referenceLineName,
   referenceLineStyle,
   referenceLineValue,
+  referenceLineWidth,
   rotateXLabels,
   showXLabels,
   showXLine,
@@ -95,6 +97,10 @@ export abstract class CartesianChartBuilder extends BaseChartBuilder {
 
     const value = Number(rawValue);
     if (isNaN(value)) return undefined;
+    const name = this.config.get(referenceLineName.key) as string;
+
+    const width = (this.config.get(referenceLineWidth.key) ||
+      referenceLineWidth.default) as number;
 
     const color = (this.config.get(referenceLineColor.key) ||
       "var(--text-error)") as string;
@@ -113,12 +119,12 @@ export abstract class CartesianChartBuilder extends BaseChartBuilder {
           lineStyle: {
             color: color,
             type: style,
-            width: 1.5,
+            width: width,
           },
           label: {
             show: true,
-            position: "end",
-            formatter: `${value}`,
+            position: name ? "insideStartTop" : "end",
+            formatter: name || `${value}`,
             color: color,
             fontSize: "var(--font-ui-smaller)",
           },

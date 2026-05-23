@@ -21,6 +21,9 @@ views:
     animation: true
     showXLabels: true
     rotateXLabels: 0
+    referenceLineValue: "5"
+    referenceLineWidth: 1
+    referenceLineName: Goal
   - type: line-chart
     name: Line Chart
     order:

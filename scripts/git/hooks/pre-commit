@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -eu
+
+if git status --short | grep --quiet '^MM'; then
+  printf '%s\n' "ERROR: Some staged files have unstaged changes" >&2
+  exit 1;
+fi
+
+if ! deno fmt --check; then
+  exit 1
+fi
+
+if ! deno lint; then
+  exit 1
+fi
+
+if ! deno check; then
+  exit 1
+fi
+
+git update-index --again

@@ -58,7 +58,7 @@ export abstract class BaseChartBuilder {
       itemWidth: 12,
       itemHeight: 12,
       padding: 0,
-      bottom: 0,
+      bottom: 8,
       orient: "horizontal",
     };
 

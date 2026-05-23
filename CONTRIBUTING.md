@@ -3,6 +3,12 @@
 Contributions are welcome! This project uses [Deno](https://deno.com/) for
 tooling and development.
 
+Setup git hooks before commiting:
+
+```sh
+deno task prepare
+```
+
 ## Commands
 
 Build the plugin for production:

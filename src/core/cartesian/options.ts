@@ -69,6 +69,14 @@ export const referenceLineValue = {
   placeholder: "50",
 } satisfies ViewOption;
 
+export const referenceLineName = {
+  key: "referenceLineName",
+  type: "text",
+  displayName: t("reference_line_name_label"),
+  placeholder: t("reference_line_name_placeholder"),
+  shouldHide: (config) => !config.get(referenceLineValue.key),
+} satisfies ViewOption;
+
 export const referenceLineColor = {
   key: "referenceLineColor",
   type: "text",
@@ -87,6 +95,17 @@ export const referenceLineStyle = {
     "dashed": t("dashed"),
     "dotted": t("dotted"),
   },
+  shouldHide: (config) => !config.get(referenceLineValue.key),
+} satisfies ViewOption;
+
+export const referenceLineWidth = {
+  key: "referenceLineWidth",
+  type: "slider",
+  displayName: t("reference_line_width_label"),
+  min: 0.5,
+  max: 3,
+  step: 0.5,
+  default: 1,
   shouldHide: (config) => !config.get(referenceLineValue.key),
 } satisfies ViewOption;
 
@@ -117,7 +136,9 @@ export const referenceLine = {
   displayName: t("reference_line_group"),
   items: [
     referenceLineValue,
+    referenceLineName,
     referenceLineColor,
     referenceLineStyle,
+    referenceLineWidth,
   ],
 } satisfies ViewOption;
