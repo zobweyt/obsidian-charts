@@ -17,6 +17,12 @@
       "esbuild": "npm:esbuild@0.28.0"
     }
   },
+  "fmt": {
+    "include": ["scripts/", "src/"]
+  },
+  "lint": {
+    "include": ["scripts/", "src/"]
+  },
   "compilerOptions": {
     "lib": ["deno.ns", "node", "dom"],
     "baseUrl": "."

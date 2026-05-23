@@ -2,9 +2,12 @@ import esbuild from "esbuild";
 
 const isWatch = Deno.args.includes("--watch");
 
-const outdir = isWatch
-  ? "./example/.obsidian/plugins/bases-chart-layouts"
-  : "./dist";
+const exampleVaultPluginDir = "./example/.obsidian/plugins/charts";
+const outdir = isWatch ? exampleVaultPluginDir : "./dist";
+
+if (isWatch) {
+  Deno.mkdir(exampleVaultPluginDir, { recursive: true });
+}
 
 const cleanEchartsPlugin: esbuild.Plugin = {
   name: "clean-echarts-and-obsidian-compliance",
