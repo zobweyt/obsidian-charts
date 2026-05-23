@@ -3,7 +3,7 @@
   "name": "Bases Chart Layouts",
   "version": "0.3.5",
   "minAppVersion": "1.10.0",
-  "description": "Adds highly customizable and native-feeling layouts to bases: Bar Chart, Line Chart, and Pie Chart.",
+  "description": "Adds chart layouts to bases so you can display notes as interactive bar, line, or pie charts.",
   "author": "Nikita Gaziev",
   "authorUrl": "https://github.com/zobweyt",
   "isDesktopOnly": false
