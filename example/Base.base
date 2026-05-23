@@ -9,7 +9,6 @@ views:
       - sleep
       - mood
     showXLine: true
-    omitZero: false
     xAxis: file.basename
     showLabels: true
     barWidth: 20
@@ -30,7 +29,6 @@ views:
       - mood
       - sleep
     showXLine: false
-    omitZero: false
     xAxis: file.basename
     lineSmooth: true
     lineArea: true
@@ -47,7 +45,6 @@ views:
       - mood
       - sleep
     showXLine: false
-    omitZero: true
     xAxis: file.basename
     showLegend: true
     showLabels: true

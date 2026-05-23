@@ -54,7 +54,7 @@ export abstract class BaseChartView extends BasesView {
     const file = this.app.vault.getAbstractFileByPath(filePath);
     if (file instanceof TFile) {
       const isNewTab = event.button === 1 || event.ctrlKey || event.metaKey;
-      this.app.workspace.getLeaf(isNewTab ? "tab" : false).openFile(file);
+      this.app.workspace.openLinkText(file.path, "", isNewTab);
     }
   }
 
@@ -67,8 +67,8 @@ export abstract class BaseChartView extends BasesView {
     if (!(file instanceof TFile)) return;
 
     event.preventDefault();
-    const menu = new Menu();
-    this.app.workspace.trigger("file-menu", menu, file);
+    const menu = Menu.forEvent(event);
+    this.app.workspace.handleLinkContextMenu(menu, file.path, "");
     menu.showAtMouseEvent(event);
   }
 

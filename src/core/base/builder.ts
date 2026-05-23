@@ -1,7 +1,7 @@
 import { EChartsOption } from "echarts";
 import { BasesQueryResult, BasesViewConfig } from "obsidian";
 import { OBSIDIAN_COLORS } from "./colors.ts";
-import { animation, color, omitZero, showLegend } from "./options.ts";
+import { animation, color, showLegend } from "./options.ts";
 
 export abstract class BaseChartBuilder {
   protected option: EChartsOption = {};
@@ -10,23 +10,12 @@ export abstract class BaseChartBuilder {
   protected readonly data: BasesQueryResult["data"];
 
   constructor(result: BasesQueryResult, config: BasesViewConfig) {
+    this.data = result.data;
     this.config = config;
     this.properties = result.properties;
 
     this.option.animation =
       (this.config.get(animation.key) ?? animation.default) as boolean;
-    const omitZeroValue = this.config.get(omitZero.key) ?? omitZero.default;
-
-    if (omitZeroValue) {
-      this.data = result.data.filter((entry) => {
-        return result.properties.some((property) => {
-          const value = entry.getValue(property);
-          return value?.isTruthy();
-        });
-      });
-    } else {
-      this.data = result.data;
-    }
   }
 
   protected abstract setupCoordinateSystem(): void;
@@ -57,7 +46,7 @@ export abstract class BaseChartBuilder {
       itemGap: 48,
       itemWidth: 12,
       itemHeight: 12,
-      padding: 0,
+      padding: [40, 0, 0, 0],
       bottom: 12,
       orient: "horizontal",
     };

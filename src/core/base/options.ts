@@ -15,13 +15,6 @@ export const animation = {
   default: false,
 } satisfies ViewOption;
 
-export const omitZero = {
-  key: "omitZero",
-  type: "toggle",
-  displayName: t("omit_zero_values_label"),
-  default: false,
-} satisfies ViewOption;
-
 export const showLegend = {
   key: "showLegend",
   type: "toggle",
@@ -42,7 +35,6 @@ export const style = {
   items: [
     color,
     animation,
-    omitZero,
     showLegend,
     showLabels,
   ],
