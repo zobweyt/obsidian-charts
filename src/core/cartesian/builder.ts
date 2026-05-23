@@ -127,6 +127,7 @@ export abstract class CartesianChartBuilder extends BaseChartBuilder {
             formatter: name || `${value}`,
             color: color,
             fontSize: "var(--font-ui-smaller)",
+            fontFamily: "inherit",
           },
         },
       ],
