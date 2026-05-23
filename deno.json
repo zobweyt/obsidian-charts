@@ -1,7 +1,8 @@
 {
   "tasks": {
     "build": "deno run -A ./scripts/build.ts",
-    "watch": "deno run -A ./scripts/build.ts --watch"
+    "watch": "deno run -A ./scripts/build.ts --watch",
+    "release": "deno run -A ./scripts/release.ts"
   },
   "imports": {
     "echarts": "npm:echarts@6.0.0",
@@ -9,6 +10,9 @@
   },
   "scopes": {
     "./scripts/": {
+      "@std/cli": "jsr:@std/cli@1.0.29",
+      "@std/fmt": "jsr:@std/fmt@1.0.10",
+      "@std/semver": "jsr:@std/semver@1.0.8",
       "esbuild": "npm:esbuild@0.28.0"
     }
   },

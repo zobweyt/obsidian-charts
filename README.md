@@ -1,7 +1,7 @@
 # Obsidian Bases Chart Layouts
 
-This plugin adds highly customizable and native-feeling layouts to bases:
-**Bar Chart**, **Line Chart**, and **Pie Chart**.
+This plugin adds highly customizable and native-feeling layouts to bases: **Bar
+Chart**, **Line Chart**, and **Pie Chart**.
 
 ## Features
 
