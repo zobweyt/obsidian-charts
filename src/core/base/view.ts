@@ -14,13 +14,17 @@ export class ChartBasesView extends BasesView {
     private rendererCtor: RendererConstructor,
   ) {
     super(controller);
-    this.container = parent;
+    this.container = parent.createDiv();
+    this.container.style.width = "100%";
+    this.container.style.height = "100%";
   }
 
   override onDataUpdated() {
     if (this.renderer) {
       this.renderer.destroy();
     }
+
+    this.container.empty();
 
     this.renderer = new this.rendererCtor({
       container: this.container,
@@ -33,6 +37,7 @@ export class ChartBasesView extends BasesView {
 
   override onunload() {
     this.renderer?.destroy();
+    this.container.remove();
     super.onunload();
   }
 }

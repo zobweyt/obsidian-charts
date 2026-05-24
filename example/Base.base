@@ -12,7 +12,7 @@ views:
       - sleep
       - enegry
       - mood
-    barWidth: 63
+    barWidth: 62
     showLegend: true
     showLabels: true
     xAxis: file.basename
