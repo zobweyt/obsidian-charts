@@ -1,80 +1,38 @@
-import { ECharts, init } from "echarts";
-import { BasesQueryResult, BasesViewConfig, Menu, TFile } from "obsidian";
 import { BasesView, QueryController } from "obsidian";
-import { BaseChartBuilder } from "./builder.ts";
+import { ChartRenderer, ChartRendererOptions } from "./renderer.ts";
 
-export abstract class BaseChartView extends BasesView {
-  abstract readonly builder: new (
-    result: BasesQueryResult,
-    config: BasesViewConfig,
-  ) => BaseChartBuilder;
+type RendererConstructor = new (options: ChartRendererOptions) => ChartRenderer;
 
+export class ChartBasesView extends BasesView {
+  protected renderer: ChartRenderer | null = null;
   readonly container: HTMLElement;
-  readonly echarts: ECharts;
-  readonly resizeObserver: ResizeObserver;
 
-  constructor(controller: QueryController, parent: HTMLElement) {
+  constructor(
+    controller: QueryController,
+    parent: HTMLElement,
+    public readonly type: string,
+    private rendererCtor: RendererConstructor,
+  ) {
     super(controller);
-
-    this.container = parent.createDiv();
-    this.container.style.width = "100%";
-    this.container.style.height = "100%";
-    this.container.style.minHeight = "var(--bases-chart-container-min-height)";
-
-    this.echarts = init(this.container, null, {
-      renderer: "svg",
-      width: this.container.clientWidth,
-      height: this.container.clientHeight,
-    });
-
-    this.resizeObserver = new ResizeObserver(
-      this.handleContainerResize.bind(this),
-    );
-    this.resizeObserver.observe(this.container);
+    this.container = parent;
   }
 
   override onDataUpdated() {
-    const option = new this.builder(this.data, this.config).build();
-    this.echarts.setOption(option, {
-      replaceMerge: ["series", "xAxis", "yAxis"],
-    });
-  }
-
-  private handleContainerResize([entry]: ResizeObserverEntry[]) {
-    const { width, height } = entry.contentRect;
-    if (width === 0 || height === 0) return;
-    this.echarts.resize({ width, height });
-  }
-
-  protected openFileByIndex(index: number, event: MouseEvent) {
-    const filePaths = this.data.data.map((entry) => entry.file.path);
-    const filePath = filePaths[index];
-    if (!filePath) return;
-
-    const file = this.app.vault.getAbstractFileByPath(filePath);
-    if (file instanceof TFile) {
-      const isNewTab = event.button === 1 || event.ctrlKey || event.metaKey;
-      this.app.workspace.openLinkText(file.path, "", isNewTab);
+    if (this.renderer) {
+      this.renderer.destroy();
     }
-  }
 
-  protected openContextMenuByIndex(index: number, event: MouseEvent) {
-    const filePaths = this.data.data.map((entry) => entry.file.path);
-    const filePath = filePaths[index];
-    if (!filePath) return;
-
-    const file = this.app.vault.getAbstractFileByPath(filePath);
-    if (!(file instanceof TFile)) return;
-
-    event.preventDefault();
-    const menu = new Menu();
-    this.app.workspace.handleLinkContextMenu(menu, file.basename, file.path);
-    menu.showAtMouseEvent(event);
+    this.renderer = new this.rendererCtor({
+      container: this.container,
+      queryResult: this.data,
+      config: this.config,
+      app: this.app,
+    });
+    this.renderer.render();
   }
 
   override onunload() {
-    this.resizeObserver.disconnect();
-    this.echarts.dispose();
-    this.container.empty();
+    this.renderer?.destroy();
+    super.onunload();
   }
 }

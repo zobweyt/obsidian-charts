@@ -12,8 +12,7 @@ Adds chart layouts to bases so you can display notes as interactive bar, line, o
 - **Bar Settings**: Make bars skinnier or wider using a simple slider.
 - **Line Settings**: Make lines smooth or straight, change their thickness, and fill the space underneath with color.
 - **Pie Settings**: Turn your pie chart into a donut chart by cutting a hole in the middle.
-- **100% Localized**: Automatically matches your UI language and supports all Obsidian locales.
-- **Lightweight (~1MB)**: Built on Apache ECharts as the only dependency.
+- **Lightweight (~42kb)**: Built with native JavaScript and has zero dependencies.
 
 ## Usage Guide
 

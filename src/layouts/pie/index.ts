@@ -1,18 +1,11 @@
-import { BasesViewRegistration } from "obsidian";
-import { style } from "../../core/base/index.ts";
 import { t } from "../../i18n/index.ts";
-import { pieHoleRadius } from "./options.ts";
-import { PIE_CHART_VIEW_ID, PieChartBasesView } from "./view.ts";
+import { STYLE_OPTION } from "../../core/base/index.ts";
+import { PIE_HOLE_RADIUS_OPTION } from "./options.ts";
 
-export const PIE_CHART_VIEW = {
-  id: PIE_CHART_VIEW_ID,
-  registration: {
-    name: t("pie_chart_name"),
-    icon: "lucide-pie-chart",
-    factory: (controller, parent) => new PieChartBasesView(controller, parent),
-    options: () => [
-      style,
-      pieHoleRadius,
-    ],
-  } satisfies BasesViewRegistration,
+export const PIE_CHART_VIEW_ID = "pie-chart";
+export const PIE_CHART_REGISTRATION = {
+  name: t("pie_chart_name"),
+  icon: "lucide-pie-chart",
+  options: () => [STYLE_OPTION, PIE_HOLE_RADIUS_OPTION],
 };
+export { PieChartRenderer } from "./renderer.ts";

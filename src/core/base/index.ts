@@ -1,4 +1,10 @@
-export { BaseChartBuilder } from "./builder.ts";
-export { color, showLabels, showLegend, style } from "./options.ts";
-export { BaseChartView } from "./view.ts";
-export { OBSIDIAN_COLORS } from "./colors.ts";
+export {
+  COLOR_OPTION,
+  LEGEND_POSITION_OPTION,
+  SHOW_LABELS_OPTION,
+  SHOW_LEGEND_OPTION,
+  STYLE_OPTION,
+} from "./options.ts";
+export { ChartBasesView } from "./view.ts";
+export { COLORS } from "./colors.ts";
+export { ChartRenderer, type ChartRendererOptions } from "./renderer.ts";

@@ -6,7 +6,6 @@
     "jsr:@std/fmt@^1.0.10": "1.0.10",
     "jsr:@std/internal@^1.0.13": "1.0.13",
     "jsr:@std/semver@1.0.8": "1.0.8",
-    "npm:echarts@6.0.0": "6.0.0",
     "npm:esbuild@0.28.0": "0.28.0",
     "npm:obsidian@1.11.0": "1.11.0_@codemirror+state@6.5.0_@codemirror+view@6.38.6"
   },
@@ -195,13 +194,6 @@
     "crelt@1.0.6": {
       "integrity": "sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g=="
     },
-    "echarts@6.0.0": {
-      "integrity": "sha512-Tte/grDQRiETQP4xz3iZWSvoHrkCQtwqd6hs+mifXcjrCuo2iKWbajFObuLJVBlDIJlOzgQPd1hsaKt/3+OMkQ==",
-      "dependencies": [
-        "tslib",
-        "zrender"
-      ]
-    },
     "esbuild@0.28.0": {
       "integrity": "sha512-sNR9MHpXSUV/XB4zmsFKN+QgVG82Cc7+/aaxJ8Adi8hyOac+EXptIp45QBPaVyX3N70664wRbTcLTOemCAnyqw==",
       "optionalDependencies": [
@@ -250,17 +242,8 @@
     "style-mod@4.1.3": {
       "integrity": "sha512-i/n8VsZydrugj3Iuzll8+x/00GH2vnYsk1eomD8QiRrSAeW6ItbCQDtfXCeJHd0iwiNagqjQkvpvREEPtW3IoQ=="
     },
-    "tslib@2.3.0": {
-      "integrity": "sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg=="
-    },
     "w3c-keyname@2.2.8": {
       "integrity": "sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ=="
-    },
-    "zrender@6.0.0": {
-      "integrity": "sha512-41dFXEEXuJpNecuUQq6JlbybmnHaqqpGlbH1yxnA5V9MMP4SbohSVZsJIwz+zdjQXSSlR1Vc34EgH1zxyTDvhg==",
-      "dependencies": [
-        "tslib"
-      ]
     }
   },
   "workspace": {
@@ -268,7 +251,6 @@
       "jsr:@std/cli@1.0.29",
       "jsr:@std/fmt@1.0.10",
       "jsr:@std/semver@1.0.8",
-      "npm:echarts@6.0.0",
       "npm:esbuild@0.28.0",
       "npm:obsidian@1.11.0"
     ]

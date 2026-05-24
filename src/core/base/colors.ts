@@ -1,4 +1,4 @@
-export const OBSIDIAN_COLORS = [
+export const COLORS = [
   "var(--color-blue)",
   "var(--color-green)",
   "var(--color-red)",

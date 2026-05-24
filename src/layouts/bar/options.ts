@@ -1,7 +1,7 @@
 import { ViewOption } from "obsidian";
 import { t } from "../../i18n/index.ts";
 
-export const barWidth = {
+export const BAR_WIDTH_OPTION = {
   key: "barWidth",
   type: "slider",
   displayName: t("bar_width_label"),

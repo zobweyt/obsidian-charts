@@ -1,1 +1,1 @@
-![[Base.base#Pie Chart]]
+![[Base.base#Line Chart]]

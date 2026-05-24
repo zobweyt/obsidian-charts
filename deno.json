@@ -6,7 +6,6 @@
     "prepare": "git config core.hooksPath ./scripts/git/hooks"
   },
   "imports": {
-    "echarts": "npm:echarts@6.0.0",
     "obsidian": "npm:obsidian@1.11.0"
   },
   "scopes": {

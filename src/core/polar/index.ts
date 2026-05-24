@@ -1,2 +1,1 @@
-export { PolarChartBuilder } from "./builder.ts";
-export { PolarChartView as PolarChartView } from "./view.ts";
+export { type ArcParams, PolarChartRenderer } from "./renderer.ts";

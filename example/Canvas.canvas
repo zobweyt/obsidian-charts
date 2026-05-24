@@ -1,6 +1,8 @@
 {
 	"nodes":[
-		{"id":"ddd34ce7e4bb6422","type":"file","file":"Base.base","x":-660,"y":-140,"width":800,"height":500,"subpath":"#Line Chart"}
+		{"id":"6be55aa7aaddae94","type":"file","file":"Base.base","subpath":"#Bar Chart","x":40,"y":-240,"width":620,"height":480},
+		{"id":"ddd34ce7e4bb6422","type":"file","file":"Base.base","subpath":"#Line Chart","x":-660,"y":-240,"width":640,"height":480},
+		{"id":"c1110c2e2e20d4ba","type":"file","file":"Base.base","subpath":"#Pie Chart","x":740,"y":-240,"width":980,"height":680}
 	],
 	"edges":[]
 }
