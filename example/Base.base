@@ -1,81 +1,45 @@
 filters:
   or:
-    - file.hasProperty("mood")
+    - file.hasProperty("enegry")
     - file.hasProperty("sleep")
-properties:
-  note.enegry:
-    displayName: enegry 234 32
+    - file.hasProperty("mood")
 views:
-  - type: bar-chart
+  - type: chart
     name: Bar Chart
     order:
       - sleep
-      - enegry
       - mood
-    barWidth: 62
+      - enegry
+    barWidth: 50
     showLegend: true
-    showLabels: true
-    xAxis: file.basename
-    lineArea: true
-    lineSmooth: true
+    referenceLineValue: "5"
+    referenceLineName: Goal
+    referenceLineStyle: dotted
+    referenceLineWidth: 3
+    yLineWidth: 1.5
+    yLineStyle: dashed
     showXLine: true
-    rotateXLabels: 0
-    yMax: ""
-    referenceLineValue: "6"
-    showXLabels: true
-    showYLabels: true
+    xLineWidth: 0.5
     color: ""
-    yFormat: "{value} of 10"
-    showYLine: true
-    xLineStyle: dotted
-    yLineStyle: solid
-    yLineWidth: 3
-    yMin: ""
-    xLineWidth: 2
-    legendPosition: bottom-end
-    referenceLineWidth: 1.5
-  - type: line-chart
+  - type: chart
     name: Line Chart
     order:
       - sleep
       - mood
       - enegry
-    showXLine: false
-    xAxis: file.basename
-    lineSmooth: true
-    lineArea: true
-    showLabels: true
-    showLegend: true
-    lineWidth: 1
-    yMax: ""
-    animation: true
+    chartType: line
+    lineSmooth: smooth
+    lineArea: gradient
+    rotateXLabels: 30
     showXLabels: true
-    rotateXLabels: 15
-    yMin: ""
-    showYLine: true
-    showYLabels: true
-    color: ""
+    showLabels: true
+    yMax: "10"
+    showLegend: true
     referenceLineValue: "5.5"
     referenceLineName: Goal
-    referenceLineColor: orange
-    referenceLineStyle: dashed
-    referenceLineWidth: 2
-    xLineStyle: solid
-    xLineWidth: 2.5
-    yFormat: "{value}"
-    yLineWidth: 1
-    legendPosition: bottom-center
-  - type: pie-chart
-    name: Pie Chart
-    order:
-      - mood
-      - enegry
-      - sleep
-    showXLine: false
-    xAxis: file.basename
-    showLegend: true
-    showLabels: true
-    pieDonut: true
-    color: ""
-    animation: true
-    pieHoleRadius: 20
+    referenceLineColor: var(--color-pink)
+    referenceLineWidth: 0.5
+    referenceLineStyle: solid
+    showXLine: true
+    xLineStyle: dotted
+    yLineStyle: dotted

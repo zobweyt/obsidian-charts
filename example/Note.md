@@ -1,2 +1,2 @@
-![[Base.base#Line Chart]]
-das
+
+![[Base.base#Bar Chart]]
