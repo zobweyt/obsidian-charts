@@ -50,7 +50,7 @@ export const Y_LINE_WIDTH_OPTION = {
   step: 0.5,
   default: 1,
   shouldHide: (c: BasesViewConfig) =>
-    !(c.get(SHOW_Y_LINE_OPTION.key) || SHOW_Y_LINE_OPTION.default),
+    !(c.get(SHOW_Y_LINE_OPTION.key) ?? SHOW_Y_LINE_OPTION.default),
 } satisfies ViewOption;
 
 export const Y_LINE_STYLE_OPTION = {
@@ -64,5 +64,5 @@ export const Y_LINE_STYLE_OPTION = {
     "dotted": t("dotted"),
   },
   shouldHide: (c: BasesViewConfig) =>
-    !(c.get(SHOW_Y_LINE_OPTION.key) || SHOW_Y_LINE_OPTION.default),
+    !(c.get(SHOW_Y_LINE_OPTION.key) ?? SHOW_Y_LINE_OPTION.default),
 } satisfies ViewOption;

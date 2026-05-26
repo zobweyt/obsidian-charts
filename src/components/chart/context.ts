@@ -68,9 +68,9 @@ export function createChartContext(options: ChartOptions): ChartContext {
       (_property: string, index: number) => COLORS[index % COLORS.length],
     );
   }
-  const showLegend = (config.get(SHOW_LEGEND_OPTION.key) ||
+  const showLegend = (config.get(SHOW_LEGEND_OPTION.key) ??
     SHOW_LEGEND_OPTION.default) as boolean;
-  const showLabels = (config.get(SHOW_LABELS_OPTION.key) ||
+  const showLabels = (config.get(SHOW_LABELS_OPTION.key) ??
     SHOW_LABELS_OPTION.default) as boolean;
   const [legendSide, legendAlign] =
     (config.get(LEGEND_POSITION_OPTION.key) as string || "bottom-center")

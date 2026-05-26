@@ -1,5 +1,5 @@
 .bases-chart-container {
-  padding: var(--size-4-6);
+  padding: var(--size-4-1);
   width: 100%;
   height: 100%;
   display: flex;
@@ -55,7 +55,7 @@
   grid-area: legend;
   display: flex;
   gap: var(--size-4-2) var(--size-4-4);
-  padding: var(--size-2-2) var(--size-4-2);
+  padding: var(--size-4-2) var(--size-4-2);
   align-items: center;
 }
 

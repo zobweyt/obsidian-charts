@@ -4,6 +4,8 @@ filters:
     - file.hasProperty("sleep")
     - file.hasProperty("mood")
 views:
+  - type: table
+    name: Table
   - type: chart
     name: Bar Chart
     order:
@@ -21,6 +23,10 @@ views:
     showXLine: true
     xLineWidth: 0.5
     color: ""
+    showXLabels: true
+    showYLabels: true
+    showYLine: true
+    showLabels: true
   - type: chart
     name: Line Chart
     order:
@@ -43,3 +49,4 @@ views:
     showXLine: true
     xLineStyle: dotted
     yLineStyle: dotted
+    showYLabels: true

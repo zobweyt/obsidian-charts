@@ -59,13 +59,13 @@ export function createAxisContext(
     return {
       ...xCommon,
       type: axisType,
-      showLine: (config.get(SHOW_X_LINE_OPTION.key) ||
+      showLine: (config.get(SHOW_X_LINE_OPTION.key) ??
         SHOW_X_LINE_OPTION.default) as boolean,
       lineWidth: (config.get(X_LINE_WIDTH_OPTION.key) ||
         X_LINE_WIDTH_OPTION.default) as number,
       lineStyle: (config.get(X_LINE_STYLE_OPTION.key) ||
         X_LINE_STYLE_OPTION.default) as string,
-      showLabels: (config.get(SHOW_X_LABELS_OPTION.key) ||
+      showLabels: (config.get(SHOW_X_LABELS_OPTION.key) ??
         SHOW_X_LABELS_OPTION.default) as boolean,
       rotateLabels: (config.get(ROTATE_X_LABELS_OPTION.key) ||
         ROTATE_X_LABELS_OPTION.default) as number,
@@ -76,13 +76,13 @@ export function createAxisContext(
   return {
     ...xCommon,
     type: axisType,
-    showLine: (config.get(SHOW_Y_LINE_OPTION.key) ||
+    showLine: (config.get(SHOW_Y_LINE_OPTION.key) ??
       SHOW_Y_LINE_OPTION.default) as boolean,
     lineWidth: (config.get(Y_LINE_WIDTH_OPTION.key) ||
       Y_LINE_WIDTH_OPTION.default) as number,
     lineStyle: (config.get(Y_LINE_STYLE_OPTION.key) ||
       Y_LINE_STYLE_OPTION.default) as string,
-    showLabels: (config.get(SHOW_Y_LABELS_OPTION.key) ||
+    showLabels: (config.get(SHOW_Y_LABELS_OPTION.key) ??
       SHOW_Y_LABELS_OPTION.default) as boolean,
     rotateLabels: 0,
     yMax: typeof rawMax === "string" && rawMax.trim() !== ""

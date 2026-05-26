@@ -17,7 +17,7 @@ export const ROTATE_X_LABELS_OPTION = {
   max: 90,
   step: 15,
   shouldHide: (c: BasesViewConfig) =>
-    !(c.get(SHOW_X_LABELS_OPTION.key) || SHOW_X_LABELS_OPTION.default),
+    !(c.get(SHOW_X_LABELS_OPTION.key) ?? SHOW_X_LABELS_OPTION.default),
 } satisfies ViewOption;
 
 export const SHOW_Y_LABELS_OPTION = {
