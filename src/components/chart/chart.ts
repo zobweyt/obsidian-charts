@@ -87,7 +87,6 @@ export class Chart {
     this.axisY.line.renderGrid(group);
     this.axisX.line.renderGrid(group);
     this.axisY.label.renderLabels();
-    this.axisY.cursor!.renderShadows();
 
     const chartType = (this.context.config.get(TYPE_OPTION.key) ||
       TYPE_OPTION.default) as string;

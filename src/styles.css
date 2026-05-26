@@ -1,11 +1,16 @@
 .bases-chart-container {
-  padding: var(--size-4-1);
   width: 100%;
   height: 100%;
   display: flex;
   box-sizing: border-box;
   min-height: 320px;
   overflow: hidden;
+}
+
+.bases-view[data-view-type="chart"] {
+  --bases-view-padding: 0;
+
+  scrollbar-gutter: unset;
 }
 
 .bases-chart-wrapper {
@@ -102,7 +107,7 @@
   position: absolute;
   pointer-events: none;
   white-space: nowrap;
-  z-index: 1000;
+  z-index: var(--layer-popover);
   background-color: var(--background-modifier-message);
   border: 0;
   border-radius: var(--size-2-3);
@@ -156,4 +161,14 @@
 
 .bases-chart-cursor-target {
   cursor: var(--cursor-link);
+}
+.bases-chart-cursor-target {
+  fill: var(--background-modifier-hover);
+  opacity: 0;
+  cursor: pointer;
+}
+
+.bases-chart-cursor-target:hover,
+.bases-chart-cursor-target:focus-visible {
+  opacity: 1;
 }

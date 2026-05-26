@@ -3,36 +3,18 @@ import type { AxisContext } from "../context.ts";
 import type { AxisTooltip } from "../tooltip/component.ts";
 
 export class AxisCursor {
-  private shadowRects = new Map<number, SVGRectElement>();
   private targets: SVGRectElement[] = [];
+  private activeIndex: number = 0;
 
   constructor(
     private context: AxisContext,
     private tooltip: AxisTooltip,
   ) {}
 
-  renderShadows() {
-    const chart = this.context.chart;
-    for (let index = 0; index < chart.groupCount; index++) {
-      const x = chart.padding.left + chart.groupWidth * index;
-      const rect = createSvg("rect", {
-        attr: {
-          x,
-          y: chart.padding.top,
-          width: chart.groupWidth,
-          height: chart.plotHeight,
-          fill: "var(--background-modifier-hover)",
-          opacity: "0",
-        },
-      });
-      rect.style.pointerEvents = "none";
-      chart.svg.appendChild(rect);
-      this.shadowRects.set(index, rect);
-    }
-  }
-
   renderTargets() {
     const chart = this.context.chart;
+    this.targets = [];
+
     for (let index = 0; index < chart.groupCount; index++) {
       const x = chart.padding.left + chart.groupWidth * index;
       const rect = createSvg("rect", {
@@ -42,7 +24,7 @@ export class AxisCursor {
           y: chart.padding.top,
           width: chart.groupWidth,
           height: chart.plotHeight,
-          fill: "transparent",
+          tabindex: index === this.activeIndex ? 0 : -1,
         },
       });
       rect.dataset.index = index.toString();
@@ -55,29 +37,100 @@ export class AxisCursor {
     const chart = this.context.chart;
     this.targets.forEach((target) => {
       const index = parseInt(target.dataset.index!, 10);
+
       target.addEventListener("mouseenter", (event) => {
         const rect = chart.container.getBoundingClientRect();
-        this.show(index);
+        this.updateFocusableIndex(index);
         this.tooltip.show(
           index,
           event.clientX - rect.left,
           event.clientY - rect.top,
         );
       });
+
       target.addEventListener("mouseleave", () => {
-        this.hide(index);
+        this.updateFocusableIndex(index);
         this.tooltip.hide();
       });
+
+      target.addEventListener("mousedown", () => {
+        this.updateFocusableIndex(index);
+      });
+
+      target.addEventListener("focus", () => {
+        if (!target.matches(":focus-visible")) return;
+
+        this.updateFocusableIndex(index);
+        const rect = chart.container.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+
+        const x = (targetRect.left + targetRect.width / 2) - rect.left;
+        const y = (targetRect.top + targetRect.height / 2) - rect.top;
+
+        this.tooltip.show(index, x, y);
+      });
+
+      target.addEventListener("blur", () => {
+        this.tooltip.hide();
+      });
+
       target.addEventListener("click", (event) => {
         this.openFile(index, event);
       });
+
       target.addEventListener("contextmenu", (event) => {
         this.openContextMenu(index, event);
       });
+
       target.addEventListener("auxclick", (event) => {
         if (event.button === 1) this.openFile(index, event);
       });
+
+      target.addEventListener("keydown", (event) => {
+        let nextIndex = index;
+
+        switch (event.key) {
+          case "ArrowRight":
+            nextIndex = Math.min(this.targets.length - 1, index + 1);
+            event.preventDefault();
+            break;
+          case "ArrowLeft":
+            nextIndex = Math.max(0, index - 1);
+            event.preventDefault();
+            break;
+          case "Home":
+            nextIndex = 0;
+            event.preventDefault();
+            break;
+          case "End":
+            nextIndex = this.targets.length - 1;
+            event.preventDefault();
+            break;
+          case "Enter":
+          case " ":
+            event.preventDefault();
+            this.openFile(index, event as unknown as MouseEvent);
+            return;
+          default:
+            return;
+        }
+
+        if (nextIndex !== index && this.targets[nextIndex]) {
+          this.targets[nextIndex].focus();
+        }
+      });
     });
+  }
+
+  private updateFocusableIndex(newIndex: number) {
+    if (newIndex < 0 || newIndex >= this.targets.length) return;
+    if (this.targets[this.activeIndex]) {
+      this.targets[this.activeIndex].setAttribute("tabindex", "-1");
+    }
+    this.activeIndex = newIndex;
+    if (this.targets[this.activeIndex]) {
+      this.targets[this.activeIndex].setAttribute("tabindex", "0");
+    }
   }
 
   private openFile(index: number, event: MouseEvent) {
@@ -87,11 +140,7 @@ export class AxisCursor {
     const filePath = filePaths[index];
     if (!filePath) return;
     const file = chart.app.vault.getAbstractFileByPath(filePath);
-    if (
-      !(file instanceof TFile) || (event.button !== 0 && event.button !== 1)
-    ) {
-      return;
-    }
+    if (!(file instanceof TFile)) return;
     if (event.button === 1) event.preventDefault();
     chart.app.workspace.openLinkText(file.path, "", Keymap.isModEvent(event));
   }
@@ -108,13 +157,5 @@ export class AxisCursor {
     const menu = new Menu();
     chart.app.workspace.handleLinkContextMenu(menu, file.name, file.path);
     menu.showAtMouseEvent(event);
-  }
-
-  private show(index: number) {
-    this.shadowRects.get(index)?.setAttribute("opacity", "1");
-  }
-
-  private hide(index: number) {
-    this.shadowRects.get(index)?.setAttribute("opacity", "0");
   }
 }
