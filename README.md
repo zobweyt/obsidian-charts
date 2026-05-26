@@ -2,6 +2,8 @@
 
 Adds chart layout to bases so you can display notes as interactive bar or line charts.
 
+<img width="1800" height="1200" alt="screenshot" src="https://github.com/user-attachments/assets/2709f991-4422-4c87-aadd-555264de4f45" />
+
 ## Usage Guide
 
 ### Prerequisites
