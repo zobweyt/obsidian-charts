@@ -1,20 +1,17 @@
 import esbuild from "esbuild";
 
-const isWatch = Deno.args.includes("--watch");
+const watch = Deno.args.includes("--watch");
 
-const exampleVaultPluginDir = "./example/.obsidian/plugins/charts";
-const outdir = isWatch ? exampleVaultPluginDir : "./dist";
+const outdir =
+  Deno.args.find((arg) => arg.startsWith("--outdir="))?.split("=")[1] ||
+  "./dist";
 
-if (isWatch) {
-  Deno.mkdir(exampleVaultPluginDir, { recursive: true });
-}
-
-const config: esbuild.BuildOptions = {
+const options: esbuild.BuildOptions = {
   entryPoints: ["./src/main.ts", "./src/styles.css"],
   outdir,
   bundle: true,
-  minify: !isWatch,
-  sourcemap: isWatch ? "inline" : false,
+  minify: !watch,
+  sourcemap: watch ? "inline" : false,
   treeShaking: true,
   format: "cjs",
   target: "es2018",
@@ -23,17 +20,12 @@ const config: esbuild.BuildOptions = {
   logLevel: "info",
 };
 
-if (isWatch) {
-  const context = await esbuild.context(config);
-  await context.watch();
-  await copyManifest();
-} else {
-  await esbuild.build(config);
-  await copyManifest();
-  Deno.exit(0);
-}
+await Deno.mkdir(outdir, { recursive: true });
+await Deno.copyFile("./manifest.json", `${outdir}/manifest.json`);
 
-async function copyManifest() {
-  const content = await Deno.readTextFile("./manifest.json");
-  await Deno.writeTextFile(`${outdir}/manifest.json`, content);
+if (watch) {
+  const context = await esbuild.context(options);
+  await context.watch();
+} else {
+  await esbuild.build(options);
 }

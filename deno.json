@@ -1,7 +1,6 @@
 {
   "tasks": {
     "build": "deno run -A ./scripts/build.ts",
-    "watch": "deno run -A ./scripts/build.ts --watch",
     "release": "deno run -A ./scripts/release.ts",
     "prepare": "git config core.hooksPath ./scripts/git/hooks"
   },

@@ -20,7 +20,7 @@ deno task build
 Start the development watcher to automatically rebuild on changes:
 
 ```sh
-deno task watch
+deno task build --watch
 ```
 
 ## Code Quality & Styling
