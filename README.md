@@ -1,18 +1,16 @@
 # Obsidian Charts for Bases
 
-Adds chart layout to bases so you can display notes as interactive bar or line charts.
+Adds a chart layout to [bases](https://help.obsidian.md/bases) so you can display notes as interactive bar or line charts.
 
-<img width="1800" height="1200" alt="screenshot" src="https://github.com/user-attachments/assets/2709f991-4422-4c87-aadd-555264de4f45" />
+<img width="1800" height="1200" alt="Screenshot" src="https://github.com/user-attachments/assets/2709f991-4422-4c87-aadd-555264de4f45" />
 
-## Usage Guide
+- Switch between bar and line charts with adjustable bar width, line smoothing, area fill, and line thickness.
+- Select any property for the X-axis, set custom Y-axis min/max, show/hide and rotate axis labels, and customize axis line style and width.
+- Add reference lines with custom value, name, color, line style, and width.
+- Show or hide the legend and choose from 12 placement positions.
+- Display value labels on chart elements and override the default chart color.
 
-### Prerequisites
-
-1. Ensure the [bases core plugin](https://help.obsidian.md/bases) is enabled in your settings.
-2. Install and enable this plugin.
-3. Open an existing base or create a new one.
-
-### Setting Up a Chart View
+## Usage
 
 1. Create a new view within your base and select the chart layout.
 2. Open the **View Settings** to configure the **X-Axis** and select the property you want to use as a category.
