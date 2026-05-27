@@ -20,8 +20,8 @@ if (watch) {
     ],
     stdout: "inherit",
     stderr: "inherit",
-  })
-  
+  });
+
   launcher.spawn();
 }
 

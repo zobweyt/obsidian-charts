@@ -1,7 +1,6 @@
 {
   "tasks": {
-    "bundle": "deno run -A ./scripts/bundle.ts",
-    "release": "deno run -A ./scripts/release.ts",
+    "build": "deno run -A ./scripts/build.ts",
     "prepare": "git config core.hooksPath ./scripts/git/hooks"
   },
   "imports": {

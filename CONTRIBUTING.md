@@ -10,16 +10,16 @@ deno task prepare
 
 ## Commands
 
-Bundle the plugin for production:
+Build the plugin for production:
 
 ```sh
-deno task bundle
+deno task build
 ```
 
 Start the development watcher to automatically rebuild on source changes and launch sandboxed Obsidian using [`obsidian-launcher`](https://github.com/jesse-r-s-hines/wdio-obsidian-service/blob/main/packages/obsidian-launcher/README.md):
 
 ```sh
-deno task bundle --watch
+deno task build --watch
 ```
 
 The first run may take some time while the launcher downloads and installs the required Obsidian version.
