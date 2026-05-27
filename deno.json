@@ -1,27 +1,24 @@
 {
   "tasks": {
-    "build": "deno run -A ./scripts/build.ts",
-    "watch": "deno run -A ./scripts/build.ts --watch",
-    "clean": "rm -rf sandbox/.obsidian dist node_modules",
+    "bundle": "deno run -A ./scripts/bundle.ts",
     "release": "deno run -A ./scripts/release.ts",
     "prepare": "git config core.hooksPath ./scripts/git/hooks"
   },
   "imports": {
-    "obsidian": "npm:obsidian@1.11.0"
+    "obsidian": "npm:obsidian@1.10.3"
   },
   "scopes": {
     "./scripts/": {
-      "@std/cli": "jsr:@std/cli@1.0.29",
-      "@std/fmt": "jsr:@std/fmt@1.0.10",
-      "@std/semver": "jsr:@std/semver@1.0.8",
-      "esbuild": "npm:esbuild@0.28.0"
+      "@std/cli": "jsr:@std/cli@^1.0.29",
+      "@std/fmt": "jsr:@std/fmt@^1.0.10",
+      "@std/semver": "jsr:@std/semver@^1.0.8"
     }
   },
   "fmt": {
     "exclude": ["*.md"]
   },
   "exclude": ["sandbox/", "dist/"],
-  "allowScripts": ["npm:classic-level@3.0.0", "npm:esbuild@0.28.0"],
+  "allowScripts": ["npm:classic-level@3.0.0"],
   "nodeModulesDir": "auto",
   "compilerOptions": {
     "lib": ["deno.ns", "node", "dom"]
