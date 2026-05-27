@@ -160,12 +160,9 @@
 }
 
 .bases-chart-cursor-target {
-  cursor: var(--cursor-link);
-}
-.bases-chart-cursor-target {
   fill: var(--background-modifier-hover);
   opacity: 0;
-  cursor: pointer;
+  cursor: var(--cursor-link);
 }
 
 .bases-chart-cursor-target:hover,
