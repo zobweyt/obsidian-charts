@@ -1,29 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@std/cli@^1.0.29": "1.0.30",
-    "jsr:@std/fmt@^1.0.10": "1.0.10",
-    "jsr:@std/internal@^1.0.14": "1.0.14",
-    "jsr:@std/semver@^1.0.8": "1.0.8",
     "npm:obsidian@1.10.3": "1.10.3_@codemirror+state@6.5.0_@codemirror+view@6.38.6"
-  },
-  "jsr": {
-    "@std/cli@1.0.30": {
-      "integrity": "769446536522d0417d7127ebcabcafac1ab0ce6766d0eb3fca1d36326fe98d13",
-      "dependencies": [
-        "jsr:@std/fmt",
-        "jsr:@std/internal"
-      ]
-    },
-    "@std/fmt@1.0.10": {
-      "integrity": "90dfba288802ac6de82fb31d0917eb9e4450b9925b954d5e51fc29ac07419db5"
-    },
-    "@std/internal@1.0.14": {
-      "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
-    },
-    "@std/semver@1.0.8": {
-      "integrity": "dc830e8b8b6a380c895d53fbfd1258dc253704ca57bbe1629ac65fd7830179b7"
-    }
   },
   "npm": {
     "@codemirror/state@6.5.0": {
@@ -83,9 +61,6 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/cli@^1.0.29",
-      "jsr:@std/fmt@^1.0.10",
-      "jsr:@std/semver@^1.0.8",
       "npm:obsidian@1.10.3"
     ]
   }

@@ -6,13 +6,6 @@
   "imports": {
     "obsidian": "npm:obsidian@1.10.3"
   },
-  "scopes": {
-    "./scripts/": {
-      "@std/cli": "jsr:@std/cli@^1.0.29",
-      "@std/fmt": "jsr:@std/fmt@^1.0.10",
-      "@std/semver": "jsr:@std/semver@^1.0.8"
-    }
-  },
   "fmt": {
     "exclude": ["*.md"]
   },
