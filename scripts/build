@@ -1,0 +1,32 @@
+#!/bin/sh
+
+set -eu
+
+PID=""
+WATCH=0
+OUTDIR="./dist"
+MANIFEST="manifest.json"
+
+cleanup() {
+  if [ -n "$PID" ] && kill -0 "$PID" 2>/dev/null; then
+    kill "$PID"
+  fi
+}
+
+trap cleanup INT TERM EXIT
+
+for arg in "$@"; do
+  if [ "$arg" = "--watch" ]; then
+    WATCH=1
+  fi
+done
+
+mkdir -p "$OUTDIR"
+cp "./$MANIFEST" "$OUTDIR/$MANIFEST"
+
+if [ "$WATCH" -eq 1 ]; then
+  deno run --no-lock -A npm:obsidian-launcher watch --version 1.10.3 --installer 1.10.3 --plugin "$OUTDIR" ./sandbox &
+  PID=$!
+fi
+
+deno bundle ./src/main.ts ./src/styles.css --outdir "$OUTDIR" --minify --format=cjs --platform=browser --external=obsidian "$@"
