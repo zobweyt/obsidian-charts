@@ -4,7 +4,7 @@ set -eu
 
 PID=""
 WATCH=0
-OUTDIR="./dist"
+OUTDIR="dist"
 MANIFEST="manifest.json"
 
 cleanup() {
@@ -22,11 +22,11 @@ for arg in "$@"; do
 done
 
 mkdir -p "$OUTDIR"
-cp "./$MANIFEST" "$OUTDIR/$MANIFEST"
+cp "$MANIFEST" "$OUTDIR/$MANIFEST"
 
 if [ "$WATCH" -eq 1 ]; then
-  deno run --no-lock -A npm:obsidian-launcher watch --version 1.10.3 --installer 1.10.3 --plugin "$OUTDIR" ./sandbox &
+  deno run --no-lock -A npm:obsidian-launcher watch --version 1.10.3 --installer 1.10.3 --plugin "$OUTDIR" sandbox &
   PID=$!
 fi
 
-deno bundle ./src/main.ts ./src/styles.css --outdir "$OUTDIR" --minify --format=cjs --platform=browser --external=obsidian "$@"
+deno bundle src/main.ts src/styles.css --outdir "$OUTDIR" --minify --format=cjs --platform=browser --external=obsidian "$@"

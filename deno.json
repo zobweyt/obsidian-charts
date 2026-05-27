@@ -1,16 +1,16 @@
 {
   "tasks": {
     "dev": {
-      "command": "./scripts/build --watch",
+      "command": "scripts/build --watch",
       "description": "Start the development server and launch sandbox",
       "dependencies": ["prepare"]
     },
     "build": {
-      "command": "./scripts/build",
+      "command": "scripts/build",
       "description": "Build the plugin for production"
     },
     "prepare": {
-      "command": "git config core.hooksPath ./scripts/git/hooks",
+      "command": "git config core.hooksPath scripts/git/hooks",
       "description": "Setup git hooks"
     }
   },
@@ -24,6 +24,6 @@
   "allowScripts": ["npm:classic-level@3.0.0"],
   "nodeModulesDir": "auto",
   "compilerOptions": {
-    "lib": ["deno.ns", "node", "dom"]
+    "lib": ["esnext", "dom"]
   }
 }
