@@ -1,10 +1,8 @@
 import esbuild from "esbuild";
 
 const watch = Deno.args.includes("--watch");
-
-const outdir =
-  Deno.args.find((arg) => arg.startsWith("--outdir="))?.split("=")[1] ||
-  "./dist";
+const outdir = "./dist";
+const manifest = "manifest.json";
 
 const options: esbuild.BuildOptions = {
   entryPoints: ["./src/main.ts", "./src/styles.css"],
@@ -21,11 +19,25 @@ const options: esbuild.BuildOptions = {
 };
 
 await Deno.mkdir(outdir, { recursive: true });
-await Deno.copyFile("./manifest.json", `${outdir}/manifest.json`);
+await Deno.copyFile(`./${manifest}`, `${outdir}/${manifest}`);
 
 if (watch) {
   const context = await esbuild.context(options);
   await context.watch();
+
+  new Deno.Command("deno", {
+    args: [
+      "run",
+      "-A",
+      "npm:obsidian-launcher",
+      "watch",
+      "--version",
+      "1.10.3",
+      "--plugin",
+      "./dist",
+      "./sandbox",
+    ],
+  }).spawn();
 } else {
   await esbuild.build(options);
 }
