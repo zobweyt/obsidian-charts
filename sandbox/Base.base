@@ -22,7 +22,6 @@ views:
     yLineStyle: dashed
     showXLine: true
     xLineWidth: 0.5
-    color: ""
     showXLabels: true
     showYLabels: true
     showYLine: true
@@ -50,3 +49,7 @@ views:
     xLineStyle: dotted
     yLineStyle: dotted
     showYLabels: true
+    colors:
+      - var(--color-blue)
+      - var(--color-green)
+      - var(--color-red)

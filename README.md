@@ -8,7 +8,7 @@ Adds a chart layout to [bases](https://help.obsidian.md/bases) so you can displa
 - Select any property for the X-axis, set custom Y-axis min/max, show/hide and rotate axis labels, and customize axis line style and width.
 - Add reference lines with custom value, name, color, line style, and width.
 - Show or hide the legend and choose from 12 placement positions.
-- Display value labels on chart elements and override the default chart color.
+- Display value labels on chart elements and override the default chart colors.
 
 ## Usage
 

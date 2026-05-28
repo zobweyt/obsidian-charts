@@ -1,7 +1,8 @@
-export { COLORS } from "./colors.ts";
+export { Chart } from "./chart.ts";
+export type { ChartContext } from "./context.ts";
 export {
   BAR_WIDTH_OPTION,
-  COLOR_OPTION,
+  COLORS_OPTION,
   LINE_AREA_OPTION,
   LINE_SMOOTH_OPTION,
   LINE_WIDTH_OPTION,
@@ -10,6 +11,3 @@ export {
   TYPE_OPTION,
 } from "./options.ts";
 export type { ChartOptions } from "./options.ts";
-export type { ChartContext } from "./context.ts";
-export { createChartContext } from "./context.ts";
-export { Chart } from "./chart.ts";

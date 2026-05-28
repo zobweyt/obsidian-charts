@@ -1,6 +1,10 @@
 import { BasesView, QueryController } from "obsidian";
+import {
+  REFERENCE_LINE_OPTION,
+  X_OPTION,
+  Y_OPTION,
+} from "./components/axis/index.ts";
 import { Chart } from "./components/chart/chart.ts";
-import type { ChartOptions } from "./components/chart/options.ts";
 import {
   BAR_WIDTH_OPTION,
   LINE_AREA_OPTION,
@@ -9,11 +13,6 @@ import {
   STYLE_OPTION,
   TYPE_OPTION,
 } from "./components/chart/options.ts";
-import {
-  REFERENCE_LINE_OPTION,
-  X_OPTION,
-  Y_OPTION,
-} from "./components/axis/index.ts";
 import { LEGEND_OPTION } from "./components/legend/options.ts";
 
 export const CHART_VIEW_ID = "chart";
@@ -31,14 +30,12 @@ export class ChartBasesView extends BasesView {
   override onDataUpdated() {
     this.renderer?.destroy();
     this.container.empty();
-    this.renderer = new Chart(
-      {
-        container: this.container,
-        data: this.data,
-        config: this.config,
-        app: this.app,
-      } satisfies ChartOptions,
-    );
+    this.renderer = new Chart({
+      container: this.container,
+      data: this.data,
+      config: this.config,
+      app: this.app,
+    });
     this.renderer.render();
   }
 
@@ -49,17 +46,15 @@ export class ChartBasesView extends BasesView {
   }
 }
 
-export function options() {
-  return [
-    TYPE_OPTION,
-    LINE_AREA_OPTION,
-    LINE_SMOOTH_OPTION,
-    LINE_WIDTH_OPTION,
-    BAR_WIDTH_OPTION,
-    X_OPTION,
-    Y_OPTION,
-    LEGEND_OPTION,
-    REFERENCE_LINE_OPTION,
-    STYLE_OPTION,
-  ];
-}
+export const options = () => [
+  TYPE_OPTION,
+  LINE_AREA_OPTION,
+  LINE_SMOOTH_OPTION,
+  LINE_WIDTH_OPTION,
+  BAR_WIDTH_OPTION,
+  X_OPTION,
+  Y_OPTION,
+  LEGEND_OPTION,
+  REFERENCE_LINE_OPTION,
+  STYLE_OPTION,
+];

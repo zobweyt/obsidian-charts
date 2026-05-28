@@ -69,17 +69,16 @@ export const SHOW_LABELS_OPTION = {
   default: false,
 } satisfies ViewOption;
 
-export const COLOR_OPTION = {
-  key: "color",
-  type: "text",
-  displayName: t("colorLabel"),
-  placeholder: t("autoPlaceholder"),
+export const COLORS_OPTION = {
+  key: "colors",
+  type: "multitext",
+  displayName: t("colorsLabel"),
 } satisfies ViewOption;
 
 export const STYLE_OPTION = {
   type: "group",
   displayName: t("styleGroup"),
-  items: [COLOR_OPTION],
+  items: [COLORS_OPTION],
 } satisfies ViewOption;
 
 export interface ChartOptions {

@@ -35,7 +35,7 @@
   "maxLabel": "Max",
   "minLabel": "Min",
   "autoPlaceholder": "auto",
-  "colorLabel": "Color",
+  "colorsLabel": "Colors",
   "showValuesLabel": "Show values",
   "showLabelsLabel": "Show labels",
   "barWidthLabel": "Bar width",

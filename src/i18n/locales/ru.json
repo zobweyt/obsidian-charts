@@ -35,7 +35,7 @@
   "maxLabel": "Макс.",
   "minLabel": "Мин.",
   "autoPlaceholder": "авто",
-  "colorLabel": "Цвет",
+  "colorsLabel": "Цвета",
   "showValuesLabel": "Показывать значения",
   "showLabelsLabel": "Показывать подписи",
   "barWidthLabel": "Ширина столбца",

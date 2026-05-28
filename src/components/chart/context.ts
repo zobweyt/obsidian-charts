@@ -4,12 +4,12 @@ import {
   BasesQueryResult,
   BasesViewConfig,
 } from "obsidian";
-import { COLORS } from "./colors.ts";
-import { ChartOptions, COLOR_OPTION, SHOW_LABELS_OPTION } from "./options.ts";
 import {
   LEGEND_POSITION_OPTION,
   SHOW_LEGEND_OPTION,
 } from "../legend/options.ts";
+import { COLORS, INTERACTIVE_ACCENT_COLOR } from "./colors.ts";
+import { ChartOptions, COLORS_OPTION, SHOW_LABELS_OPTION } from "./options.ts";
 
 const DEFAULT_FONT_SIZE = 13;
 const PADDING = 24;
@@ -55,18 +55,16 @@ export function createChartContext(options: ChartOptions): ChartContext {
       return isNaN(parsedNumber) ? null : parsedNumber;
     })
   );
-  const customColor = (
-    config.get(COLOR_OPTION.key) as string | undefined
-  )?.trim();
+  const customColor = config.get(COLORS_OPTION.key) as string[] | undefined;
   let colors: string[];
-  if (customColor && customColor !== "" && customColor !== "undefined") {
-    colors = propertyNames.map(() => customColor);
-  } else if (propertyNames.length === 1) {
-    colors = ["var(--interactive-accent)"];
-  } else {
-    colors = propertyNames.map(
-      (_property: string, index: number) => COLORS[index % COLORS.length],
+  if (Array.isArray(customColor) && !!customColor.length) {
+    colors = propertyNames.map((_, index) =>
+      customColor[index % customColor.length]
     );
+  } else if (propertyNames.length === 1) {
+    colors = [INTERACTIVE_ACCENT_COLOR];
+  } else {
+    colors = propertyNames.map((_, index) => COLORS[index % COLORS.length]);
   }
   const showLegend = (config.get(SHOW_LEGEND_OPTION.key) ??
     SHOW_LEGEND_OPTION.default) as boolean;
