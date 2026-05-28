@@ -2,7 +2,7 @@
 
 Adds a chart layout to [bases](https://help.obsidian.md/bases) so you can display notes as interactive bar or line charts.
 
-<img alt="Screenshot" src="https://github.com/user-attachments/assets/3695ad65-803f-467c-bb83-142841ace829" />
+<img alt="Screenshot" src="https://github.com/user-attachments/assets/727545a6-c889-44ca-af41-00b7e340bba2" />
 
 - Switch between bar and line charts with adjustable bar width, line smoothing, area fill, and line thickness.
 - Select any property for the X-axis, set custom Y-axis min/max, show/hide and rotate axis labels, and customize axis line style and width.
