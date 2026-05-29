@@ -1,4 +1,4 @@
-name: Release
+name: Bump manifest version and publish release
 
 on:
   workflow_dispatch:
@@ -42,7 +42,7 @@ jobs:
           echo "$(jq --arg ver "$NEW_VERSION" '.version = $ver' manifest.json)" > manifest.json
           echo "new_version_value=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Setup Git and SSH
+      - name: Configure Git and SSH
         run: |
           mkdir -p ~/.ssh
 
@@ -67,7 +67,7 @@ jobs:
           git tag "${{ steps.bump.outputs.new_version_value }}" -m "Release ${{ steps.bump.outputs.new_version_value }}"
           git push origin HEAD:${{ github.ref_name }} --tags
 
-      - name: Setup deno
+      - name: Set up deno
         uses: denoland/setup-deno@v2
         with:
           cache: true
