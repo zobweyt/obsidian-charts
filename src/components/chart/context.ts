@@ -8,8 +8,16 @@ import {
   LEGEND_POSITION_OPTION,
   SHOW_LEGEND_OPTION,
 } from "../legend/options.ts";
+import { t } from "../../i18n/index.ts";
 import { COLORS, INTERACTIVE_ACCENT_COLOR } from "./colors.ts";
-import { ChartOptions, COLORS_OPTION, SHOW_LABELS_OPTION } from "./options.ts";
+import { X_AXIS_OPTION } from "../axis/options.ts";
+import {
+  AGGREGATION_OPTION,
+  ChartOptions,
+  COLORS_OPTION,
+  SERIES_BY_OPTION,
+  SHOW_LABELS_OPTION,
+} from "./options.ts";
 
 const DEFAULT_FONT_SIZE = 13;
 const PADDING = 24;
@@ -22,6 +30,9 @@ export interface ChartContext {
   config: BasesViewConfig;
   app: App;
   values: (number | null)[][];
+  xLabels: string[];
+  groupFilePaths: string[][];
+  seriesNames: string[];
   colors: string[];
   fontSize: number;
   width: number;
@@ -46,25 +57,54 @@ export function createChartContext(options: ChartOptions): ChartContext {
   const propertyNames = data.properties.map(
     (property: BasesPropertyId) => config.getDisplayName(property),
   );
-  const values = data.properties.map((property: BasesPropertyId) =>
+  const xProperty = (config.get(X_AXIS_OPTION.key) ||
+    X_AXIS_OPTION.default) as BasesPropertyId;
+  const rawXLabels = data.data.map((entry) =>
+    entry.getValue(xProperty)?.toString() ?? entry.file.name
+  );
+  const rawValues = data.properties.map((property: BasesPropertyId) =>
     data.data.map((entry) => {
       const rawValue = entry.getValue(property);
-      const parsedNumber = rawValue !== null
-        ? Number.parseFloat(String(rawValue))
-        : NaN;
-      return isNaN(parsedNumber) ? null : parsedNumber;
+      const parsedNumber = parseNumericValue(rawValue);
+      return parsedNumber === null ? null : parsedNumber;
     })
   );
+  const aggregation = (config.get(AGGREGATION_OPTION.key) ||
+    AGGREGATION_OPTION.default) as string;
+  const seriesByProperty = config.get(SERIES_BY_OPTION.key) as
+    | BasesPropertyId
+    | undefined;
+  const rawSeriesLabels = seriesByProperty
+    ? data.data.map((entry) =>
+      entry.getValue(seriesByProperty)?.toString() || t("noSeriesValue")
+    )
+    : [];
+  const { values, xLabels, groupFilePaths, seriesNames } = aggregation === "sum"
+    ? seriesByProperty
+      ? aggregateValuesByLabelAndSeries(
+        rawValues,
+        rawXLabels,
+        rawSeriesLabels,
+        propertyNames,
+        data,
+      )
+      : aggregateValuesByLabel(rawValues, rawXLabels, propertyNames, data)
+    : {
+      values: rawValues,
+      xLabels: rawXLabels,
+      groupFilePaths: data.data.map((entry) => [entry.file.path]),
+      seriesNames: propertyNames,
+    };
   const customColor = config.get(COLORS_OPTION.key) as string[] | undefined;
   let colors: string[];
   if (Array.isArray(customColor) && !!customColor.length) {
-    colors = propertyNames.map((_, index) =>
+    colors = seriesNames.map((_, index) =>
       customColor[index % customColor.length]
     );
-  } else if (propertyNames.length === 1) {
+  } else if (seriesNames.length === 1) {
     colors = [INTERACTIVE_ACCENT_COLOR];
   } else {
-    colors = propertyNames.map((_, index) => COLORS[index % COLORS.length]);
+    colors = seriesNames.map((_, index) => COLORS[index % COLORS.length]);
   }
   const showLegend = (config.get(SHOW_LEGEND_OPTION.key) ??
     SHOW_LEGEND_OPTION.default) as boolean;
@@ -89,6 +129,9 @@ export function createChartContext(options: ChartOptions): ChartContext {
     config: options.config,
     app: options.app,
     values,
+    xLabels,
+    groupFilePaths,
+    seriesNames,
     colors,
     fontSize,
     width: 0,
@@ -106,4 +149,135 @@ export function createChartContext(options: ChartOptions): ChartContext {
     legendSide,
     legendAlign: legendAlign || "center",
   };
+}
+
+function parseNumericValue(rawValue: unknown): number | null {
+  if (rawValue === null || rawValue === undefined) return null;
+  if (typeof rawValue === "number") {
+    return Number.isFinite(rawValue) ? rawValue : null;
+  }
+  const normalized = String(rawValue).replace(/[^0-9.-]/g, "");
+  if (!normalized) return null;
+  const parsedNumber = Number.parseFloat(normalized);
+  return Number.isFinite(parsedNumber) ? parsedNumber : null;
+}
+
+function aggregateValuesByLabel(
+  rawValues: (number | null)[][],
+  rawXLabels: string[],
+  propertyNames: string[],
+  data: BasesQueryResult,
+): {
+  values: (number | null)[][];
+  xLabels: string[];
+  groupFilePaths: string[][];
+  seriesNames: string[];
+} {
+  const labelToIndex = new Map<string, number>();
+  const xLabels: string[] = [];
+  const groupFilePaths: string[][] = [];
+  const values = rawValues.map(() => [] as (number | null)[]);
+  const hasValue = rawValues.map(() => [] as boolean[]);
+
+  rawXLabels.forEach((label, rowIndex) => {
+    let groupIndex = labelToIndex.get(label);
+    if (groupIndex === undefined) {
+      groupIndex = xLabels.length;
+      labelToIndex.set(label, groupIndex);
+      xLabels.push(label);
+      groupFilePaths.push([]);
+      values.forEach((series, seriesIndex) => {
+        series[groupIndex!] = 0;
+        hasValue[seriesIndex][groupIndex!] = false;
+      });
+    }
+
+    groupFilePaths[groupIndex].push(data.data[rowIndex].file.path);
+    rawValues.forEach((series, seriesIndex) => {
+      const value = series[rowIndex];
+      if (value === null) return;
+      values[seriesIndex][groupIndex!] =
+        (values[seriesIndex][groupIndex!] ?? 0) + value;
+      hasValue[seriesIndex][groupIndex!] = true;
+    });
+  });
+
+  values.forEach((series, seriesIndex) => {
+    series.forEach((_value, groupIndex) => {
+      if (!hasValue[seriesIndex][groupIndex]) series[groupIndex] = null;
+    });
+  });
+
+  return { values, xLabels, groupFilePaths, seriesNames: propertyNames };
+}
+
+function aggregateValuesByLabelAndSeries(
+  rawValues: (number | null)[][],
+  rawXLabels: string[],
+  rawSeriesLabels: string[],
+  propertyNames: string[],
+  data: BasesQueryResult,
+): {
+  values: (number | null)[][];
+  xLabels: string[];
+  groupFilePaths: string[][];
+  seriesNames: string[];
+} {
+  const labelToIndex = new Map<string, number>();
+  const seriesToIndex = new Map<string, number>();
+  const xLabels: string[] = [];
+  const seriesNames: string[] = [];
+  const groupFilePaths: string[][] = [];
+  const values: (number | null)[][] = [];
+  const hasValue: boolean[][] = [];
+
+  const ensureXIndex = (label: string): number => {
+    let groupIndex = labelToIndex.get(label);
+    if (groupIndex !== undefined) return groupIndex;
+    groupIndex = xLabels.length;
+    labelToIndex.set(label, groupIndex);
+    xLabels.push(label);
+    groupFilePaths.push([]);
+    values.forEach((series, seriesIndex) => {
+      series[groupIndex!] = 0;
+      hasValue[seriesIndex][groupIndex!] = false;
+    });
+    return groupIndex;
+  };
+
+  const ensureSeriesIndex = (name: string): number => {
+    let seriesIndex = seriesToIndex.get(name);
+    if (seriesIndex !== undefined) return seriesIndex;
+    seriesIndex = seriesNames.length;
+    seriesToIndex.set(name, seriesIndex);
+    seriesNames.push(name);
+    values.push(xLabels.map(() => 0));
+    hasValue.push(xLabels.map(() => false));
+    return seriesIndex;
+  };
+
+  rawXLabels.forEach((label, rowIndex) => {
+    const groupIndex = ensureXIndex(label);
+    groupFilePaths[groupIndex].push(data.data[rowIndex].file.path);
+    rawValues.forEach((series, propertyIndex) => {
+      const value = series[rowIndex];
+      if (value === null) return;
+      const seriesLabel = rawSeriesLabels[rowIndex];
+      const seriesName = rawValues.length === 1
+        ? seriesLabel
+        : `${seriesLabel} / ${propertyNames[propertyIndex]}`;
+      const seriesIndex = ensureSeriesIndex(seriesName);
+      values[seriesIndex][groupIndex] = (values[seriesIndex][groupIndex] ?? 0) +
+        value;
+      hasValue[seriesIndex][groupIndex] = true;
+    });
+  });
+
+  values.forEach((series, seriesIndex) => {
+    xLabels.forEach((_label, groupIndex) => {
+      if (!hasValue[seriesIndex][groupIndex]) series[groupIndex] = null;
+    });
+  });
+
+  return { values, xLabels, groupFilePaths, seriesNames };
 }

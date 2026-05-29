@@ -1,6 +1,10 @@
 import { ViewOption } from "obsidian";
 import { t } from "../../i18n/index.ts";
-import { SHOW_LABELS_OPTION } from "../chart/options.ts";
+import {
+  AGGREGATION_OPTION,
+  SERIES_BY_OPTION,
+  SHOW_LABELS_OPTION,
+} from "../chart/options.ts";
 import {
   SHOW_X_LINE_OPTION,
   SHOW_Y_LINE_OPTION,
@@ -57,6 +61,8 @@ export const Y_OPTION = {
   items: [
     Y_MAX_OPTION,
     Y_MIN_OPTION,
+    AGGREGATION_OPTION,
+    SERIES_BY_OPTION,
     SHOW_Y_LINE_OPTION,
     Y_LINE_WIDTH_OPTION,
     Y_LINE_STYLE_OPTION,
