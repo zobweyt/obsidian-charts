@@ -1,6 +1,4 @@
-import type { BasesPropertyId } from "obsidian";
 import type { AxisContext } from "../context.ts";
-import { X_AXIS_OPTION } from "../options.ts";
 
 export class AxisTooltip {
   private element: HTMLElement;
@@ -12,11 +10,7 @@ export class AxisTooltip {
     this.titleElement = this.element.createDiv({
       cls: "bases-chart-tooltip-title",
     });
-    const propertyNames = context.chart.data.properties.map(
-      (property: BasesPropertyId) =>
-        context.chart.config.getDisplayName(property),
-    );
-    propertyNames.forEach((name: string, index: number) => {
+    context.chart.seriesNames.forEach((name: string, index: number) => {
       const row = this.element.createDiv({ cls: "bases-chart-tooltip-row" });
       const left = row.createDiv({ cls: "bases-chart-tooltip-row-left" });
       const indicator = left.createDiv({
@@ -33,12 +27,7 @@ export class AxisTooltip {
 
   show(index: number, rx: number, ry: number) {
     const chart = this.context.chart;
-    const xProperty = (chart.config.get(X_AXIS_OPTION.key) ||
-      X_AXIS_OPTION.default) as BasesPropertyId;
-    const labels = chart.data.data.map((entry) =>
-      entry.getValue(xProperty)?.toString() ?? entry.file.name
-    );
-    this.titleElement.textContent = labels[index];
+    this.titleElement.textContent = chart.xLabels[index];
     chart.values.forEach((values: (number | null)[], seriesIndex: number) => {
       this.rows[seriesIndex].value.textContent = (values[index] ?? 0)
         .toString();

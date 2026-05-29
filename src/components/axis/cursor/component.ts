@@ -135,9 +135,8 @@ export class AxisCursor {
 
   private openFile(index: number, event: MouseEvent) {
     const chart = this.context.chart;
-    const filePaths = chart.data.data.map((entry) => entry.file.path);
-    if (index < 0 || index >= filePaths.length) return;
-    const filePath = filePaths[index];
+    if (index < 0 || index >= chart.groupFilePaths.length) return;
+    const filePath = chart.groupFilePaths[index][0];
     if (!filePath) return;
     const file = chart.app.vault.getAbstractFileByPath(filePath);
     if (!(file instanceof TFile)) return;
@@ -147,9 +146,8 @@ export class AxisCursor {
 
   private openContextMenu(index: number, event: MouseEvent) {
     const chart = this.context.chart;
-    const filePaths = chart.data.data.map((entry) => entry.file.path);
-    if (index < 0 || index >= filePaths.length) return;
-    const filePath = filePaths[index];
+    if (index < 0 || index >= chart.groupFilePaths.length) return;
+    const filePath = chart.groupFilePaths[index][0];
     if (!filePath) return;
     const file = chart.app.vault.getAbstractFileByPath(filePath);
     if (!(file instanceof TFile)) return;

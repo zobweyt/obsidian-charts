@@ -1,6 +1,4 @@
-import type { BasesPropertyId } from "obsidian";
 import type { AxisContext } from "../axis/context.ts";
-import { X_AXIS_OPTION } from "../axis/options.ts";
 
 const EPSILON = 1e-10;
 const FONT_WIDTH_FACTOR = 0.6;
@@ -128,11 +126,7 @@ export function computeLayout(ax: AxisContext, ay: AxisContext) {
   const maxV = Math.max(ay.yMax ?? computeDataMax(chart.values) ?? 100, 1);
   const minV = ay.yMin ?? 0;
   ay.labels = computeNiceLabels(maxV, minV);
-  const xProperty = (chart.config.get(X_AXIS_OPTION.key) ||
-    X_AXIS_OPTION.default) as BasesPropertyId;
-  ax.labels = chart.data.data.map((entry) =>
-    entry.getValue(xProperty)?.toString() ?? entry.file.name
-  );
+  ax.labels = chart.xLabels;
   chart.minValue = minV;
   chart.valueRange = maxV - minV || 1;
   chart.groupCount = Math.max(ax.labels.length, 1);

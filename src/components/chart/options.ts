@@ -69,6 +69,23 @@ export const SHOW_LABELS_OPTION = {
   default: false,
 } satisfies ViewOption;
 
+export const AGGREGATION_OPTION = {
+  key: "aggregation",
+  type: "dropdown",
+  displayName: t("aggregationLabel"),
+  default: "none",
+  options: { "none": t("aggregationNone"), "sum": t("aggregationSum") },
+} satisfies ViewOption;
+
+export const SERIES_BY_OPTION = {
+  key: "seriesBy",
+  type: "property",
+  displayName: t("seriesByLabel"),
+  placeholder: t("seriesByPlaceholder"),
+  shouldHide: (c: BasesViewConfig) =>
+    (c.get(AGGREGATION_OPTION.key) || AGGREGATION_OPTION.default) !== "sum",
+} satisfies ViewOption;
+
 export const COLORS_OPTION = {
   key: "colors",
   type: "multitext",

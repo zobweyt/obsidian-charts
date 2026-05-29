@@ -1,4 +1,3 @@
-import type { BasesPropertyId } from "obsidian";
 import type { ChartContext } from "../chart/context.ts";
 
 export class Legend {
@@ -9,10 +8,7 @@ export class Legend {
   render() {
     this.destroy();
     if (!this.chart.showLegend) return;
-    const propertyNames = this.chart.data.properties.map(
-      (property: BasesPropertyId) => this.chart.config.getDisplayName(property),
-    );
-    const items = propertyNames.map(
+    const items = this.chart.seriesNames.map(
       (name: string, index: number) => ({
         name,
         color: this.chart.colors[index % this.chart.colors.length],
