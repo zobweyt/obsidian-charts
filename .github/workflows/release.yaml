@@ -3,7 +3,7 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      version_type:
+      release_type:
         required: true
         default: patch
         type: choice
@@ -30,9 +30,9 @@ jobs:
         run: |
           CURRENT_VERSION=$(jq -r '.version' manifest.json)
           IFS='.' read -r major minor patch <<< "$CURRENT_VERSION"
-          if [ "${{ inputs.version_type }}" == "major" ]; then
+          if [ "${{ inputs.release_type }}" == "major" ]; then
             major=$((major + 1)); minor=0; patch=0
-          elif [ "${{ inputs.version_type }}" == "minor" ]; then
+          elif [ "${{ inputs.release_type }}" == "minor" ]; then
             minor=$((minor + 1)); patch=0
           else
             patch=$((patch + 1))
@@ -88,3 +88,10 @@ jobs:
             --title "${{ steps.bump.outputs.new_version_value }}" \
             --generate-notes \
             dist/main.js dist/manifest.json dist/styles.css
+
+      - name: Update Workflow Run Name
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api -X POST /repos/${{ github.repository }}/actions/runs/${{ github.run_id }} \
+            -f display_title="Release ${{ steps.bump.outputs.new_version_value }}"
