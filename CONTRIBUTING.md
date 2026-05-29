@@ -9,8 +9,8 @@ We welcome all contributions! Please follow this guide to set up your environmen
 
 ## Development
 
-> [!NOTE]
-> This project is undergoing active development with architecture refactoring planned. Fast iteration is preferred over absolute perfection; final code quality will be guided through code review and our style workflow.
+> [!IMPORTANT]
+> This project has successfully reached its MLP (Minimum Lovable Product) stage, delivering its core value and functionality. While we are not actively driving any huge new features internally, we welcome community contributions. Adding or improving chart options is perfectly fine, but if you want to introduce entirely new chart types, please open an issue first so we can discuss it. Our primary focus right now remains on code health and architecture refactoring—version `1.0.0` will be released once the current codebase is polished to perfection. After that milestone, we will be ready to explore new chart types.
 
 We use [Deno](https://deno.com) for zero-dependency development tooling. After cloning, initialize the project environment:
 
