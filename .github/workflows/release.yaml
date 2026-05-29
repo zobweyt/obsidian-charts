@@ -82,7 +82,7 @@ jobs:
 
       - name: Create GitHub Release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           gh release create "${{ steps.bump.outputs.new_version_value }}" \
             --title "${{ steps.bump.outputs.new_version_value }}" \
