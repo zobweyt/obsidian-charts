@@ -55,6 +55,6 @@ This project relies on the Obsidian [`getLanguage`](https://docs.obsidian.md/Ref
 We welcome all localization contributions, from fixing typos to adding entirely new languages. To contribute, please open a Pull Request using the existing locale files as a baseline:
 
 | Code | Name              | Progress | Contributors | File                                        |
-| ---- | ----------------- | -------- | ------------ | ------------------------------------------- |
+| :--- | :---------------- | :------- | :----------- | :------------------------------------------ |
 | `en` | English           | 100%     | @zobweyt     | [`en.json`](./src/lib/i18n/locales/en.json) |
 | `ru` | Russian (Русский) | 100%     | @zobweyt     | [`ru.json`](./src/lib/i18n/locales/ru.json) |
