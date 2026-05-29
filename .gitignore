@@ -1,8 +1,5 @@
 # Build output
 /dist
 
-# Dependencies
-/node_modules
-
 # Generated automatically by obsidian-launcher
 /sandbox/.obsidian

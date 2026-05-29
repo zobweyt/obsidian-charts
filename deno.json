@@ -22,7 +22,6 @@
   },
   "exclude": ["sandbox/", "dist/"],
   "allowScripts": ["npm:classic-level@3.0.0"],
-  "nodeModulesDir": "auto",
   "compilerOptions": {
     "lib": ["esnext", "dom"]
   }
