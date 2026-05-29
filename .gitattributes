@@ -1,4 +1,6 @@
+# Force LF line endings for all files
 * text=auto eol=lf
 
+# Obsidian-specific files configuration
 *.base linguist-language=yaml text
 *.canvas linguist-language=json text
