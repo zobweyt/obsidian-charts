@@ -3,7 +3,8 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      release_type:
+      type:
+        description: Type
         required: true
         default: patch
         type: choice
@@ -30,9 +31,9 @@ jobs:
         run: |
           CURRENT_VERSION=$(jq -r '.version' manifest.json)
           IFS='.' read -r major minor patch <<< "$CURRENT_VERSION"
-          if [ "${{ inputs.release_type }}" == "major" ]; then
+          if [ "${{ inputs.type }}" == "major" ]; then
             major=$((major + 1)); minor=0; patch=0
-          elif [ "${{ inputs.release_type }}" == "minor" ]; then
+          elif [ "${{ inputs.type }}" == "minor" ]; then
             minor=$((minor + 1)); patch=0
           else
             patch=$((patch + 1))
@@ -41,7 +42,7 @@ jobs:
           echo "$(jq --arg ver "$NEW_VERSION" '.version = $ver' manifest.json)" > manifest.json
           echo "new_version_value=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Commit changes and push tag
+      - name: Setup Git and SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
@@ -57,10 +58,11 @@ jobs:
           git config --global commit.gpgsign true
           git config --global tag.gpgsign true
 
+      - name: Commit changes and push tag
+        run: |
           git add manifest.json
           git commit -m "Release ${{ steps.bump.outputs.new_version_value }}" --no-verify
           git tag "${{ steps.bump.outputs.new_version_value }}" -m "Release ${{ steps.bump.outputs.new_version_value }}"
-
           git push origin HEAD:${{ github.ref_name }} --tags
 
       - name: Setup deno
@@ -88,10 +90,3 @@ jobs:
             --title "${{ steps.bump.outputs.new_version_value }}" \
             --generate-notes \
             dist/main.js dist/manifest.json dist/styles.css
-
-      - name: Update Workflow Run Name
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api -X POST /repos/${{ github.repository }}/actions/runs/${{ github.run_id }} \
-            -f display_title="Release ${{ steps.bump.outputs.new_version_value }}"
