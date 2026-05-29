@@ -10,8 +10,8 @@
   "fmt": {
     "exclude": ["*.md"]
   },
-  "exclude": ["sandbox/", "dist/"],
+  "exclude": ["dist/", "sandbox/"],
   "compilerOptions": {
-    "lib": ["esnext", "dom"]
+    "lib": ["dom", "es2022"]
   }
 }
