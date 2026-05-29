@@ -1,0 +1,23 @@
+.bases-chart-wrapper {
+  display: grid;
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+  cursor: var(--cursor);
+}
+
+.bases-chart-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  box-sizing: border-box;
+  min-height: 320px;
+  overflow: hidden;
+}
+
+.bases-view[data-view-type="chart"] {
+  --bases-view-padding: 0;
+
+  scrollbar-gutter: unset;
+}

@@ -1,0 +1,70 @@
+.bases-chart-legend-top {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "legend" "chart";
+}
+
+.bases-chart-legend-bottom {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  grid-template-areas: "chart" "legend";
+}
+
+.bases-chart-legend-left {
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "legend chart";
+}
+
+.bases-chart-legend-right {
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr;
+  grid-template-areas: "chart legend";
+}
+
+.bases-chart-legend {
+  grid-area: legend;
+  display: flex;
+  gap: var(--size-4-2) var(--size-4-4);
+  padding: var(--size-4-2) var(--size-4-2);
+  align-items: center;
+}
+
+.bases-chart-legend-top,
+.bases-chart-legend-bottom {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.bases-chart-legend-left,
+.bases-chart-legend-right {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.bases-chart-legend-start {
+  justify-content: flex-start;
+}
+
+.bases-chart-legend-center {
+  justify-content: center;
+}
+
+.bases-chart-legend-end {
+  justify-content: flex-end;
+}
+
+.bases-chart-legend-item {
+  display: flex;
+  font-size: var(--font-ui-small);
+  align-items: center;
+  gap: var(--size-2-3);
+}
+
+.bases-chart-legend-indicator {
+  display: inline-block;
+  width: var(--size-4-3);
+  height: var(--size-4-3);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
