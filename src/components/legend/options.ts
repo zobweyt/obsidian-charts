@@ -1,4 +1,4 @@
-import { t } from "../../i18n/index.ts";
+import { t } from "../../lib/i18n/t.ts";
 import type { BasesViewConfig, ViewOption } from "obsidian";
 
 export const SHOW_LEGEND_OPTION = {

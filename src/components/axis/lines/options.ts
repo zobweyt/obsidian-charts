@@ -1,5 +1,5 @@
 import { BasesViewConfig, ViewOption } from "obsidian";
-import { t } from "../../../i18n/index.ts";
+import { t } from "../../../lib/i18n/t.ts";
 
 export const SHOW_X_LINE_OPTION = {
   key: "showXLine",

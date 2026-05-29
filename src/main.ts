@@ -1,5 +1,5 @@
 import { Plugin } from "obsidian";
-import { t } from "./i18n/index.ts";
+import { t } from "./lib/i18n/t.ts";
 import { CHART_VIEW_ID, ChartBasesView, options } from "./view.ts";
 
 export default class ChartsPlugin extends Plugin {

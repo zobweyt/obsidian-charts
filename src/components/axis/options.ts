@@ -1,5 +1,5 @@
 import { ViewOption } from "obsidian";
-import { t } from "../../i18n/index.ts";
+import { t } from "../../lib/i18n/t.ts";
 import {
   AGGREGATION_OPTION,
   SERIES_BY_OPTION,

@@ -8,7 +8,7 @@ import {
   LEGEND_POSITION_OPTION,
   SHOW_LEGEND_OPTION,
 } from "../legend/options.ts";
-import { t } from "../../i18n/index.ts";
+import { t } from "../../lib/i18n/t.ts";
 import { COLORS, INTERACTIVE_ACCENT_COLOR } from "./colors.ts";
 import { X_AXIS_OPTION } from "../axis/options.ts";
 import {
