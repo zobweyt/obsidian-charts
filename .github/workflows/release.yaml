@@ -42,12 +42,25 @@ jobs:
           echo "new_version_value=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Commit changes and push tag
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/signing_key
+          chmod 600 ~/.ssh/signing_key
+
+          git config --global user.name "Nikita Gaziev"
+          git config --global user.email "zobweyt@gmail.com"
+
+          git config --global gpg.format ssh
+          git config --global user.signingkey ~/.ssh/signing_key
+          git config --global commit.gpgsign true
+          git config --global tag.gpgsign true
+
           git add manifest.json
-          git commit -m "Release ${{ steps.bump.outputs.new_version_value }}"
+          git commit -m "Release ${{ steps.bump.outputs.new_version_value }}" --no-verify
           git tag "${{ steps.bump.outputs.new_version_value }}" -m "Release ${{ steps.bump.outputs.new_version_value }}"
+
           git push origin HEAD:${{ github.ref_name }} --tags
 
       - name: Setup deno
