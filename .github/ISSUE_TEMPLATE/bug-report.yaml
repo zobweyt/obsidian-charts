@@ -1,0 +1,57 @@
+name: Bug report
+
+description: Create a bug report to help the plugin improve
+
+labels:
+  - bug
+
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for reporting a bug! Before submitting, please [make sure](obsidian://show-plugin?id=charts) you are using the latest version of the plugin and searched the [existing issues](https://github.com/zobweyt/obsidian-charts/issues?q=label%3Abug%20sort%3Aupdated) to prevent duplicates.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear description of what the bug is. Attaching screenshots, video or a GIF would be appreciated.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Describe how the bug can be reproduced.
+      placeholder: |
+        1. Create a new base...
+        2. Create a chart view...
+        3. Configure the view options like this: ...
+        4. See the unexpected behavior: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expectation
+    attributes:
+      label: Expectation
+      description: What did you expect to happen instead?
+      placeholder: I expect ... but ... is happening instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: debug-info
+    attributes:
+      label: Debug info
+      description: Paste the output of the [Show debug info](https://obsidian.md/help/resources#Collect+debug+information) command.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: console-logs
+    attributes:
+      label: Console logs
+      description: Paste any relevant logs from the [developer console](https://obsidian.md/help/resources#Capture+console+logs).
+      render: javascript
