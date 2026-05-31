@@ -1,0 +1,43 @@
+name: Feature request
+
+description: Suggest an idea or a new view option for the plugin
+
+labels:
+  - enhancement
+
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for suggesting an idea! Before submitting, please search the [existing issues](https://github.com/zobweyt/obsidian-charts/issues?q=label%3Aenhancement%20sort%3Aupdated) to prevent duplicates.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: What kind of feature is this?
+      description: Select the category that best describes your request.
+      options:
+        - "New View Option"
+        - "New Chart Type"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe your idea. Explain your specific use case and why existing options don't solve it.
+      placeholder: I want to be able to... because currently I cannot...
+    validations:
+      required: true
+
+  - type: textarea
+    id: specification
+    attributes:
+      label: Specification
+      description: Provide the specific details based on your selection above.
+      placeholder: |
+        - How should it look or where should it appear in the UI?
+        - What options does it need (e.g., toggle, formula)?
+    validations:
+      required: true
