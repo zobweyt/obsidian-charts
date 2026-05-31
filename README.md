@@ -17,3 +17,11 @@ Adds a chart layout to [bases](https://help.obsidian.md/bases) so you can displa
 2. Open the **View Settings** to configure the **X-Axis** and select the property you want to use as a category.
 3. Open the **Properties** menu in the top-right corner of the base to select the data for **Y-Axis** to be used as values.
 4. Optional: in **Y-Axis**, set **Aggregation** to **Sum by X-axis** to combine rows with the same X-axis value. Use **Series by** to split the summed values into separate chart series by another property.
+
+## Sandbox
+
+Live demos and examples of all chart layouts and configuration options are available in a sandbox vault.
+
+1. Download [`sandbox.zip`](https://github.com/zobweyt/obsidian-charts/releases/latest/download/sandbox.zip) from the [latest release](https://github.com/zobweyt/obsidian-charts/releases/latest).
+2. Extract the archive and open the folder as a vault in Obsidian.
+3. Explore the notes, which serve as interactive documentation for all plugin features.

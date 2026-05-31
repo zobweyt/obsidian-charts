@@ -42,7 +42,25 @@ jobs:
           echo "$(jq --arg ver "$NEW_VERSION" '.version = $ver' manifest.json)" > manifest.json
           echo "new_version_value=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Configure Git and SSH
+      - name: Set up deno
+        uses: denoland/setup-deno@v2
+        with:
+          cache: true
+          deno-version: latest
+
+      - name: Build plugin
+        run: deno task build
+
+      - name: Create sandbox.zip
+        run: |
+          mkdir -p sandbox/.obsidian/plugins/charts
+          cp -rT dist sandbox/.obsidian/plugins/charts
+
+          echo -ne '[\n  "charts"\n]' > sandbox/.obsidian/community-plugins.json
+
+          cd sandbox && zip -r ../sandbox.zip .
+
+      - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
 
@@ -52,6 +70,8 @@ jobs:
 
           chmod 600 ~/.ssh/signing_key
 
+      - name: Configure Git
+        run: |
           git config --global user.name "Nikita Gaziev"
           git config --global user.email "zobweyt@gmail.com"
 
@@ -67,15 +87,6 @@ jobs:
           git tag "${{ steps.bump.outputs.new_version_value }}" -m "Release ${{ steps.bump.outputs.new_version_value }}"
           git push origin HEAD:${{ github.ref_name }} --tags
 
-      - name: Set up deno
-        uses: denoland/setup-deno@v2
-        with:
-          cache: true
-          deno-version: latest
-
-      - name: Build plugin
-        run: deno task build
-
       - name: Generate artifact attestation
         uses: actions/attest@v4
         with:
@@ -83,6 +94,7 @@ jobs:
             dist/main.js
             dist/manifest.json
             dist/styles.css
+            sandbox.zip
 
       - name: Create GitHub Release
         env:
@@ -91,4 +103,4 @@ jobs:
           gh release create "${{ steps.bump.outputs.new_version_value }}" \
             --title "${{ steps.bump.outputs.new_version_value }}" \
             --generate-notes \
-            dist/main.js dist/manifest.json dist/styles.css
+            dist/main.js dist/manifest.json dist/styles.css sandbox.zip
