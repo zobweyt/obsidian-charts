@@ -27,7 +27,7 @@ body:
     attributes:
       label: Description
       description: Describe your idea. Explain your specific use case and why existing options don't solve it.
-      placeholder: I want to be able to... because currently I cannot...
+      placeholder: I want to be able to ... because currently I cannot ...
     validations:
       required: true
 
