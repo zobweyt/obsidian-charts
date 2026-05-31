@@ -37,6 +37,12 @@ deno task prepare
   deno task build
   ```
 
+- Remove build output and the sandbox Obsidian configuration folder:
+
+  ```sh
+  deno task clean
+  ```
+
 - Run code quality checks before submitting a Pull Request:
   ```sh
   deno fmt

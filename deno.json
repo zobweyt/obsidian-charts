@@ -2,6 +2,7 @@
   "tasks": {
     "dev": "scripts/build --watch",
     "build": "scripts/build",
+    "clean": "rm -rf dist sandbox/.obsidian",
     "prepare": "git config core.hooksPath scripts/git/hooks"
   },
   "imports": {
