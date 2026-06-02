@@ -4,13 +4,11 @@ We welcome all contributions! Please follow this guide to set up your environmen
 
 ## Quick Start
 
-1. [Fork](https://github.com/zobweyt/obsidian-charts/fork) this repository.
-2. Clone it locally.
+1. Find an issue in [Milestones](https://github.com/zobweyt/obsidian-charts/milestones), prioritizing top issues or those labeled [help wanted](https://github.com/zobweyt/obsidian-charts/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22help%20wanted%22) and [good first issue](https://github.com/zobweyt/obsidian-charts/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22).
+2. Before introducing massive features, please [open an issue](https://github.com/zobweyt/obsidian-charts/issues/new?template=feature-request.yaml) first to discuss it.
+3. [Fork](https://github.com/zobweyt/obsidian-charts/fork) this repository and clone it locally.
 
 ## Development
-
-> [!IMPORTANT]
-> This project has successfully reached its MLP (Minimum Lovable Product) stage, delivering its core value and functionality. While we are not actively driving any huge new features internally, we welcome community contributions. Adding or improving chart options is perfectly fine, but if you want to introduce entirely new chart types, please open an issue first so we can discuss it. Our primary focus right now remains on code health and architecture refactoring—version `1.0.0` will be released once the current codebase is polished to perfection. After that milestone, we will be ready to explore new chart types.
 
 We use [Deno](https://deno.com) for zero-dependency development tooling. After cloning, initialize the project environment:
 
