@@ -33,7 +33,7 @@ views:
       - mood
       - enegry
     chartType: line
-    lineSmooth: smooth
+    lineSmooth: bump
     lineArea: gradient
     rotateXLabels: 30
     showXLabels: true
@@ -53,3 +53,5 @@ views:
       - var(--color-blue)
       - var(--color-green)
       - var(--color-red)
+    connectZeros: true
+    showPoints: true
