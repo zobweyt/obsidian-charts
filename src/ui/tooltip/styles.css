@@ -1,21 +1,13 @@
 .bases-chart-tooltip {
   position: absolute;
-  pointer-events: none;
-  white-space: nowrap;
-  z-index: var(--layer-popover);
-  background-color: var(--background-modifier-message);
-  border: 0;
-  border-radius: var(--size-2-3);
-  padding: var(--size-2-3) var(--size-4-3);
-  box-shadow: 0 var(--size-2-1) var(--size-4-2)
-    var(--background-modifier-box-shadow);
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
   font-family: var(--font-interface);
 }
 
 .bases-chart-tooltip-title {
-  font-size: var(--font-ui-small);
-  color: #fafafa;
-  font-weight: var(--font-medium);
+  text-align: left;
 }
 
 .bases-chart-tooltip-row {
@@ -34,16 +26,15 @@
 .bases-chart-tooltip-indicator {
   width: var(--size-4-3);
   height: var(--size-4-3);
-  border-radius: 9999px;
+  border-radius: 50%;
 }
 
 .bases-chart-tooltip-name {
-  font-size: var(--font-ui-small);
-  color: #969696;
+  opacity: 0.5;
+  font-weight: var(--font-normal);
 }
 
 .bases-chart-tooltip-value {
-  font-size: var(--font-ui-small);
-  color: #fafafa;
+  font-weight: var(--font-normal);
   font-variant-numeric: tabular-nums;
 }

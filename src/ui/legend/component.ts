@@ -1,4 +1,4 @@
-import type { ChartContext } from "../chart/context.ts";
+import { ChartContext } from "../chart/context.ts";
 
 export function createLegend(chart: ChartContext): HTMLElement | null {
   if (!chart.showLegend) return null;

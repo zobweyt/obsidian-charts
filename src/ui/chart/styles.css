@@ -24,3 +24,7 @@
 .bases-chart-cursor-target:focus-visible {
   opacity: 1;
 }
+
+.bases-chart-value-label {
+  font-size: calc(var(--font-ui-small) - 1px);
+}

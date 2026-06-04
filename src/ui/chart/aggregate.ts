@@ -1,4 +1,4 @@
-import type { BasesQueryResult } from "obsidian";
+import { BasesQueryResult } from "obsidian";
 
 export function parseNumericValue(rawValue: unknown): number | null {
   if (rawValue === null || rawValue === undefined) return null;

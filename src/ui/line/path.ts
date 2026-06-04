@@ -1,47 +1,32 @@
+import { linear } from "../../lib/curve/linear.ts";
+import { bump } from "../../lib/curve/bump.ts";
+import { natural } from "../../lib/curve/natural.ts";
+import { monotone } from "../../lib/curve/monotone.ts";
+import { step } from "../../lib/curve/step.ts";
+import { stepbefore } from "../../lib/curve/stepbefore.ts";
+import { stepafter } from "../../lib/curve/stepafter.ts";
+import { Point } from "../../lib/point.ts";
+
+const curves: Record<
+  string,
+  (points: Point[], close?: boolean, bottom?: number) => string
+> = {
+  linear,
+  bump,
+  natural,
+  monotone,
+  step,
+  stepbefore,
+  stepafter,
+};
+
 export function createPath(
-  points: { x: number; y: number }[],
-  smooth: boolean,
+  points: Point[],
+  curve: string,
   close: boolean,
   bottom: number,
 ): string {
-  if (points.length === 0) return "";
-  if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
-  let d = `M ${points[0].x} ${points[0].y}`;
-  if (smooth && points.length > 2) {
-    const n = points.length;
-    const slopes = points.slice(0, -1).map((point, index) => {
-      const dx = points[index + 1].x - point.x;
-      return dx !== 0 ? (points[index + 1].y - point.y) / dx : 0;
-    });
-    const tangents = points.map((_, i) => {
-      if (i === 0 || i === n - 1) return i === 0 ? slopes[0] : slopes[n - 2];
-      const s1 = slopes[i - 1], s2 = slopes[i];
-      if (s1 * s2 <= 0) return 0;
-      return Math.sign(s1) *
-        Math.min(
-          Math.abs(2 * s1 * s2 / (s1 + s2)),
-          3 * Math.min(Math.abs(s1), Math.abs(s2)),
-        );
-    });
-    for (let i = 0; i < n - 1; i++) {
-      const p0 = points[i], p1 = points[i + 1], dx = p1.x - p0.x;
-      if (dx === 0) {
-        d += ` L ${p1.x} ${p1.y}`;
-        continue;
-      }
-      d += ` C ${p0.x + dx / 3} ${p0.y + tangents[i] * dx / 3}, ${
-        p1.x - dx / 3
-      } ${p1.y - tangents[i + 1] * dx / 3}, ${p1.x} ${p1.y}`;
-    }
-  } else {
-    for (let i = 1; i < points.length; i++) {
-      d += ` L ${points[i].x} ${points[i].y}`;
-    }
-  }
-  if (close) {
-    d += ` L ${points[points.length - 1].x} ${bottom} L ${
-      points[0].x
-    } ${bottom} Z`;
-  }
-  return d;
+  const fn = curves[curve];
+  if (fn) return fn(points, close, bottom);
+  return linear(points, close, bottom);
 }

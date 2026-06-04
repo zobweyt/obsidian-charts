@@ -3,13 +3,14 @@ export function createSvgTextElement(
   x: number,
   y: number,
   content: string,
-  extra?: { anchor?: string; fill?: string; transform?: string },
+  extra?: { anchor?: string; fill?: string; transform?: string; cls?: string },
 ): SVGTextElement {
   const element = createSvg("text", {
     cls: "bases-chart-label",
     attr: { x, y, "text-anchor": extra?.anchor || "middle" },
     parent,
   });
+  if (extra?.cls) element.classList.add(extra.cls);
   element.textContent = content;
   element.style.fill = extra?.fill || "var(--text-muted)";
   if (extra?.transform) element.setAttribute("transform", extra.transform);

@@ -1,6 +1,6 @@
 import { Keymap, Menu, TFile } from "obsidian";
-import type { AxisContext } from "../context.ts";
-import type { Tooltip } from "../../tooltip/component.ts";
+import { AxisContext } from "../context.ts";
+import { Tooltip } from "../../tooltip/component.ts";
 
 export class AxisCursor {
   private targets: SVGRectElement[] = [];
@@ -11,12 +11,14 @@ export class AxisCursor {
   }[] = [];
   private activeIndex: number = 0;
 
+  highlight?: (index: number | null) => void;
+
   constructor(
     private context: AxisContext,
     private tooltip: Tooltip,
   ) {}
 
-  renderTargets() {
+  renderTargets(parent?: SVGElement) {
     const chart = this.context.chart;
     this.targets = [];
     if (chart.groupWidth <= 0 || chart.plotHeight <= 0) return;
@@ -34,7 +36,7 @@ export class AxisCursor {
         },
       });
       rect.dataset.index = index.toString();
-      chart.svg.appendChild(rect);
+      (parent || chart.svg).appendChild(rect);
       this.targets.push(rect);
     }
   }
@@ -43,6 +45,7 @@ export class AxisCursor {
     const chart = this.context.chart;
     const rect = chart.container.getBoundingClientRect();
     this.updateFocusableIndex(index);
+    this.highlight?.(index);
     this.tooltip.show(
       index,
       event.clientX - rect.left,
@@ -52,6 +55,7 @@ export class AxisCursor {
 
   private onMouseLeave(index: number) {
     this.updateFocusableIndex(index);
+    this.highlight?.(null);
     this.tooltip.hide();
   }
 
@@ -63,6 +67,7 @@ export class AxisCursor {
     if (!target.matches(":focus-visible")) return;
     const chart = this.context.chart;
     this.updateFocusableIndex(index);
+    this.highlight?.(index);
     const rect = chart.container.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
     const x = (targetRect.left + targetRect.width / 2) - rect.left;
@@ -71,6 +76,7 @@ export class AxisCursor {
   }
 
   private onBlur() {
+    this.highlight?.(null);
     this.tooltip.hide();
   }
 
@@ -116,6 +122,7 @@ export class AxisCursor {
     }
 
     if (nextIndex !== index && this.targets[nextIndex]) {
+      this.highlight?.(nextIndex);
       this.targets[nextIndex].focus();
     }
   }

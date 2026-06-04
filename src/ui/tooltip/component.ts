@@ -1,4 +1,4 @@
-import type { ChartContext } from "../chart/context.ts";
+import { ChartContext } from "../chart/context.ts";
 import { computePosition } from "./position.ts";
 
 export class Tooltip {
@@ -7,7 +7,7 @@ export class Tooltip {
   private rows: { indicator: HTMLElement; value: HTMLElement }[] = [];
 
   constructor(private chart: ChartContext) {
-    this.element = createDiv({ cls: "bases-chart-tooltip" });
+    this.element = createDiv({ cls: "tooltip bases-chart-tooltip" });
     this.titleElement = this.element.createDiv({
       cls: "bases-chart-tooltip-title",
     });

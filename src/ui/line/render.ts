@@ -1,17 +1,16 @@
-import type { ChartContext } from "../chart/context.ts";
+import { ChartContext } from "../chart/context.ts";
 import { createSvgTextElement, gradientFill } from "../chart/svg.ts";
 import { createPath } from "./path.ts";
 
-export interface Point {
-  x: number;
-  y: number;
-}
+import { Point } from "../../lib/point.ts";
 
 export function computePoints(
   chart: ChartContext,
   values: (number | null)[],
-): Point[] {
+  connectZeros: boolean,
+): (Point | null)[] {
   return values.map((value, index) => {
+    if ((value === null || value === 0) && !connectZeros) return null;
     const x = chart.padding.left + chart.groupWidth * (index + 0.5);
     const pointValue = value ?? 0;
     return {
@@ -22,17 +21,34 @@ export function computePoints(
   });
 }
 
+export function segmentsFromPoints(points: (Point | null)[]): Point[][] {
+  const segments: Point[][] = [];
+  let current: Point[] = [];
+  for (const p of points) {
+    if (p) {
+      current.push(p);
+    } else {
+      if (current.length) {
+        segments.push(current);
+        current = [];
+      }
+    }
+  }
+  if (current.length) segments.push(current);
+  return segments;
+}
+
 export function renderArea(
   parent: SVGGElement,
   points: Point[],
-  smooth: boolean,
+  curve: string,
   baseline: number,
   resolvedColor: string,
   areaMode: string,
 ) {
   const path = createSvg("path", {
     attr: {
-      d: createPath(points, smooth, true, baseline),
+      d: createPath(points, curve, true, baseline),
     },
   });
   path.style.fill = areaMode === "gradient"
@@ -46,14 +62,14 @@ export function renderArea(
 export function renderLinePath(
   parent: SVGGElement,
   points: Point[],
-  smooth: boolean,
+  curve: string,
   baseline: number,
   color: string,
   lineWidth: number,
 ) {
   const path = createSvg("path", {
     attr: {
-      d: createPath(points, smooth, false, baseline),
+      d: createPath(points, curve, false, baseline),
       fill: "none",
       stroke: color,
       "stroke-width": lineWidth,
@@ -66,21 +82,28 @@ export function renderLinePath(
 
 export function renderPoints(
   parent: SVGGElement,
-  points: Point[],
+  points: (Point | null)[],
   values: (number | null)[],
   lineWidth: number,
   color: string,
 ) {
   values.forEach((_, index) => {
+    const point = points[index];
+    if (!point) return;
     const circle = createSvg("circle", {
+      cls: "bases-chart-dot",
       attr: {
-        cx: points[index].x,
-        cy: points[index].y,
-        r: 3 * lineWidth,
-        fill: color,
+        cx: point.x,
+        cy: point.y,
+        r: 2 + lineWidth,
+        fill: "var(--background-secondary)",
+        stroke: color,
+        "stroke-width": lineWidth,
         opacity: "1",
       },
     });
+    circle.dataset.index = index.toString();
+    circle.dataset.color = color;
     circle.style.pointerEvents = "none";
     parent.appendChild(circle);
   });
@@ -88,15 +111,20 @@ export function renderPoints(
 
 export function renderLabels(
   parent: SVGGElement,
-  points: Point[],
+  points: (Point | null)[],
   values: (number | null)[],
+  lineWidth: number,
 ) {
+  const gap = Math.round(2 + 1.5 * lineWidth) + 4;
   values.forEach((value, index) => {
+    const point = points[index];
+    if (!point) return;
     createSvgTextElement(
       parent,
-      points[index].x,
-      points[index].y - 8,
+      point.x,
+      point.y - gap,
       (value ?? 0).toString(),
+      { cls: "bases-chart-value-label" },
     );
   });
 }

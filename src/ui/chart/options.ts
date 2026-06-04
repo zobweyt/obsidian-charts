@@ -1,9 +1,4 @@
-import type {
-  App,
-  BasesQueryResult,
-  BasesViewConfig,
-  ViewOption,
-} from "obsidian";
+import { App, BasesQueryResult, BasesViewConfig, ViewOption } from "obsidian";
 import { t } from "../../lib/i18n/index.ts";
 
 export const TYPE_OPTION = {
@@ -31,7 +26,15 @@ export const LINE_SMOOTH_OPTION = {
   type: "dropdown",
   displayName: t("curveLabel"),
   default: "linear",
-  options: { "linear": t("curveLinear"), "smooth": t("curveSmooth") },
+  options: {
+    "linear": t("curveLinear"),
+    "bump": t("curveBump"),
+    "natural": t("curveNatural"),
+    "monotone": t("curveMonotone"),
+    "step": t("curveStep"),
+    "stepbefore": t("curveStepBefore"),
+    "stepafter": t("curveStepAfter"),
+  },
   shouldHide: (config) =>
     (config.get(TYPE_OPTION.key) || TYPE_OPTION.default) !== "line",
 } satisfies ViewOption;
@@ -54,10 +57,28 @@ export const LINE_WIDTH_OPTION = {
   key: "lineWidth",
   type: "slider",
   displayName: t("lineWidthLabel"),
-  min: 1,
-  max: 10,
-  step: 0.5,
+  min: 0.5,
+  max: 3,
+  step: 0.25,
   default: 1,
+  shouldHide: (config) =>
+    (config.get(TYPE_OPTION.key) || TYPE_OPTION.default) !== "line",
+} satisfies ViewOption;
+
+export const SHOW_POINTS_OPTION = {
+  key: "showPoints",
+  type: "toggle",
+  displayName: t("showPointsLabel"),
+  default: false,
+  shouldHide: (config) =>
+    (config.get(TYPE_OPTION.key) || TYPE_OPTION.default) !== "line",
+} satisfies ViewOption;
+
+export const CONNECT_ZEROS_OPTION = {
+  key: "connectZeros",
+  type: "toggle",
+  displayName: t("connectZerosLabel"),
+  default: false,
   shouldHide: (config) =>
     (config.get(TYPE_OPTION.key) || TYPE_OPTION.default) !== "line",
 } satisfies ViewOption;

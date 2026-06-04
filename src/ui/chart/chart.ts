@@ -90,6 +90,7 @@ export class Chart {
 
     this.axisY.line.renderGrid(group);
     this.axisX.line.renderGrid(group);
+    this.axisY.cursor!.renderTargets(group);
     this.axisY.label.renderLabels();
 
     const chartType = (this.context.config.get(TYPE_OPTION.key) ||
@@ -103,11 +104,22 @@ export class Chart {
     this.axisY.refLine!.render(group);
     this.context.svg.appendChild(group);
     this.axisX.label.renderLabels();
-    this.axisY.cursor!.renderTargets();
     this.legend?.remove();
     this.legend = createLegend(this.context);
     if (this.legend) this.context.wrapper.appendChild(this.legend);
     this.axisY.cursor!.attachEvents();
+    this.axisY.cursor!.highlight = (index) => {
+      const dots = this.context.svg.querySelectorAll<SVGCircleElement>(
+        ".bases-chart-dot",
+      );
+      for (const dot of dots) {
+        const isActive = index !== null &&
+          dot.dataset.index === index.toString();
+        dot.style.fill = isActive
+          ? dot.dataset.color || "var(--interactive-accent)"
+          : "var(--background-secondary)";
+      }
+    };
   }
 
   destroy() {

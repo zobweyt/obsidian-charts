@@ -1,4 +1,4 @@
-import type { ChartContext } from "../chart/context.ts";
+import { ChartContext } from "../chart/context.ts";
 import { BAR_WIDTH_OPTION } from "../chart/options.ts";
 import {
   createBarLabel,
@@ -23,6 +23,10 @@ export class Bar {
     const step = barWidth + GAP;
     const contentWidth = step * this.chart.values.length - GAP;
 
+    const radius = parseInt(
+      getComputedStyle(this.chart.container).getPropertyValue("--radius-s"),
+    ) || 4;
+
     this.chart.values.forEach(
       (values, seriesIndex) => {
         const color = this.chart.colors[seriesIndex];
@@ -36,7 +40,7 @@ export class Bar {
           const barY = this.chart.baseline - barHeight;
           const bar = createSvg("path", {
             attr: {
-              d: createBarPath(barX, barY, barWidth, barHeight),
+              d: createBarPath(barX, barY, barWidth, barHeight, radius),
               fill: color,
             },
           });
