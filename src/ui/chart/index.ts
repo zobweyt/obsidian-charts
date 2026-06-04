@@ -3,10 +3,12 @@ export type { ChartContext } from "./context.ts";
 export {
   BAR_WIDTH_OPTION,
   COLORS_OPTION,
+  CONNECT_ZEROS_OPTION,
   LINE_AREA_OPTION,
   LINE_SMOOTH_OPTION,
   LINE_WIDTH_OPTION,
   SHOW_LABELS_OPTION,
+  SHOW_POINTS_OPTION,
   STYLE_OPTION,
   TYPE_OPTION,
 } from "./options.ts";

@@ -1,4 +1,4 @@
-import type { AxisContext } from "../context.ts";
+import { AxisContext } from "../context.ts";
 import {
   computeRotatedTextHalfWidth,
   computeRotatedTextHeight,

@@ -2,9 +2,11 @@ import { REFERENCE_LINE_OPTION } from "../axis/index.ts";
 import { X_OPTION, Y_OPTION } from "../axis/options.ts";
 import {
   BAR_WIDTH_OPTION,
+  CONNECT_ZEROS_OPTION,
   LINE_AREA_OPTION,
   LINE_SMOOTH_OPTION,
   LINE_WIDTH_OPTION,
+  SHOW_POINTS_OPTION,
   STYLE_OPTION,
   TYPE_OPTION,
 } from "../chart/options.ts";
@@ -15,6 +17,8 @@ export const options = () => [
   LINE_AREA_OPTION,
   LINE_SMOOTH_OPTION,
   LINE_WIDTH_OPTION,
+  SHOW_POINTS_OPTION,
+  CONNECT_ZEROS_OPTION,
   BAR_WIDTH_OPTION,
   X_OPTION,
   Y_OPTION,

@@ -1,5 +1,5 @@
 import { t } from "../../lib/i18n/index.ts";
-import type { ViewOption } from "obsidian";
+import { ViewOption } from "obsidian";
 
 export const SHOW_LEGEND_OPTION = {
   key: "showLegend",

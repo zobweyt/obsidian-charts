@@ -15,17 +15,16 @@ import {
   AGGREGATION_OPTION,
   ChartOptions,
   COLORS_OPTION,
+  CONNECT_ZEROS_OPTION,
   SERIES_BY_OPTION,
   SHOW_LABELS_OPTION,
+  SHOW_POINTS_OPTION,
 } from "./options.ts";
 import {
   aggregateValuesByLabel,
   aggregateValuesByLabelAndSeries,
   parseNumericValue,
 } from "./aggregate.ts";
-
-const DEFAULT_FONT_SIZE = 13;
-const PADDING = 24;
 
 export interface ChartContext {
   container: HTMLElement;
@@ -52,6 +51,8 @@ export interface ChartContext {
   groupCount: number;
   showLegend: boolean;
   showLabels: boolean;
+  showPoints: boolean;
+  connectZeros: boolean;
   legendSide: string;
   legendAlign: string;
 }
@@ -115,6 +116,10 @@ export function createChartContext(options: ChartOptions): ChartContext {
     SHOW_LEGEND_OPTION.default) as boolean;
   const showLabels = (config.get(SHOW_LABELS_OPTION.key) ??
     SHOW_LABELS_OPTION.default) as boolean;
+  const showPoints = (config.get(SHOW_POINTS_OPTION.key) ??
+    SHOW_POINTS_OPTION.default) as boolean;
+  const connectZeros = (config.get(CONNECT_ZEROS_OPTION.key) ??
+    CONNECT_ZEROS_OPTION.default) as boolean;
   const [legendSide, legendAlign] =
     (config.get(LEGEND_POSITION_OPTION.key) as string || "bottom-center")
       .split("-");
@@ -124,8 +129,7 @@ export function createChartContext(options: ChartOptions): ChartContext {
   options.container.appendChild(wrapper);
   const svg = createSvg("svg", { cls: "bases-chart-svg" });
   wrapper.appendChild(svg);
-  const fontSize = parseFloat(getComputedStyle(wrapper).fontSize) ||
-    DEFAULT_FONT_SIZE;
+  const fontSize = parseFloat(getComputedStyle(wrapper).fontSize);
   return {
     container: options.container,
     wrapper,
@@ -141,7 +145,7 @@ export function createChartContext(options: ChartOptions): ChartContext {
     fontSize,
     width: 0,
     height: 0,
-    padding: { top: PADDING, bottom: PADDING, left: PADDING, right: PADDING },
+    padding: { top: 0, bottom: 0, left: 0, right: 0 },
     areaBottom: 0,
     plotHeight: 0,
     baseline: 0,
@@ -151,6 +155,8 @@ export function createChartContext(options: ChartOptions): ChartContext {
     groupCount: 0,
     showLegend,
     showLabels,
+    showPoints,
+    connectZeros,
     legendSide,
     legendAlign: legendAlign || "center",
   };

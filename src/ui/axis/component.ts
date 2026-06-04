@@ -4,7 +4,7 @@ import { AxisLines } from "./lines/component.ts";
 import { AxisReferenceLine } from "./reference/component.ts";
 import { AxisCursor } from "./cursor/component.ts";
 import { Tooltip } from "../tooltip/component.ts";
-import type { ChartContext } from "../chart/context.ts";
+import { ChartContext } from "../chart/context.ts";
 
 export class Axis<T extends AxisType> {
   context: AxisContext;

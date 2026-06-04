@@ -1,4 +1,4 @@
-import type { AxisContext } from "../axis/context.ts";
+import { AxisContext } from "../axis/context.ts";
 
 const EPSILON = 1e-10;
 const FONT_WIDTH_FACTOR = 0.6;
@@ -143,6 +143,26 @@ export function computeLayout(ax: AxisContext, ay: AxisContext) {
     ax.rotateLabels,
     chart.fontSize,
   );
+  if (ay.yMax != null) {
+    const dataMax = computeDataMax(chart.values) ?? maxV;
+    const headroomFrac = Math.max(0, (maxV - dataMax) / maxV);
+    const factor = Math.max(0, 1 - headroomFrac * 2);
+    const basePad = chart.showLabels
+      ? Math.round(chart.fontSize * 1.2)
+      : Math.round(chart.fontSize * 0.5);
+    chart.padding.top = Math.round(basePad * factor);
+  } else {
+    chart.padding.top = chart.showLabels
+      ? Math.round(chart.fontSize * 1.2) + 8
+      : Math.round(chart.fontSize * 0.5);
+  }
+  const cssPad = parseFloat(
+    getComputedStyle(chart.wrapper).getPropertyValue("--size-4-2"),
+  ) || 8;
+  chart.padding.left += cssPad;
+  chart.padding.top += cssPad;
+  chart.padding.bottom += cssPad;
+  chart.padding.right = 8;
   chart.plotHeight = Math.max(
     0,
     chart.areaBottom - chart.padding.top - chart.padding.bottom,

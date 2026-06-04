@@ -1,5 +1,4 @@
-import type { AxisContext } from "../context.ts";
-import { TYPE_OPTION } from "../../chart/options.ts";
+import { AxisContext } from "../context.ts";
 import { computeYPosition } from "../../chart/layout.ts";
 import { createSvgGridLine } from "../../chart/svg.ts";
 
@@ -29,14 +28,8 @@ export class AxisLines {
         );
       }
     } else {
-      const chartType = (chart.config.get(TYPE_OPTION.key) ||
-        TYPE_OPTION.default) as string;
-      const count = chartType === "bar"
-        ? chart.groupCount
-        : chart.groupCount - 1;
-      const offset = chartType === "bar" ? 0 : 0.5;
-      for (let index = 0; index <= count; index++) {
-        const x = chart.padding.left + chart.groupWidth * (index + offset);
+      for (let index = 0; index <= chart.groupCount; index++) {
+        const x = chart.padding.left + chart.groupWidth * index;
         createSvgGridLine(
           group,
           x,
