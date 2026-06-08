@@ -4,28 +4,6 @@ filters:
     - file.hasProperty("sleep")
     - file.hasProperty("mood")
 views:
-  - type: table
-    name: Table
-  - type: chart
-    name: Bar Chart
-    order:
-      - sleep
-      - mood
-      - enegry
-    barWidth: 50
-    showLegend: true
-    referenceLineValue: "5"
-    referenceLineName: Goal
-    referenceLineStyle: dotted
-    referenceLineWidth: 3
-    yLineWidth: 1.5
-    yLineStyle: dashed
-    showXLine: true
-    xLineWidth: 0.5
-    showXLabels: true
-    showYLabels: true
-    showYLine: true
-    showLabels: true
   - type: chart
     name: Line Chart
     order:
@@ -55,3 +33,23 @@ views:
       - var(--color-red)
     connectZeros: true
     showPoints: true
+  - type: chart
+    name: Bar Chart
+    order:
+      - sleep
+      - mood
+      - enegry
+    barWidth: 50
+    showLegend: true
+    referenceLineValue: "5"
+    referenceLineName: Goal
+    referenceLineStyle: dotted
+    referenceLineWidth: 3
+    yLineWidth: 1.5
+    yLineStyle: dashed
+    showXLine: true
+    xLineWidth: 0.5
+    showXLabels: true
+    showYLabels: true
+    showYLine: true
+    showLabels: true
