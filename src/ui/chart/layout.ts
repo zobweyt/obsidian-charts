@@ -124,7 +124,7 @@ export function computeXLabelPadding(
 
 export function computeLayout(ax: AxisContext, ay: AxisContext) {
   const chart = ay.chart;
-  const maxV = Math.max(ay.yMax ?? computeDataMax(chart.values) ?? 100, 1);
+  const maxV = ay.yMax ?? computeDataMax(chart.values) ?? 100;
   const minV = ay.yMin ?? 0;
   ay.labels = computeNiceLabels(maxV, minV);
   ax.labels = chart.xLabels;
