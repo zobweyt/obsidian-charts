@@ -1,0 +1,25 @@
+filters:
+  and:
+    - file.inFolder("Examples/Daily")
+properties:
+  note.height:
+    displayName: Height (cm)
+views:
+  - type: chart
+    name: Last entries
+    order:
+      - height
+    sort: []
+    chartType: line
+    colors:
+      - var(--color-green)
+    showPoints: true
+    showXLine: true
+    xLineStyle: dashed
+    xLineWidth: 0.5
+    yLineWidth: 0.5
+    lineWidth: 2
+    yMax: "190"
+    yMin: "160"
+    showLegend: true
+    lineSmooth: linear

@@ -1,0 +1,71 @@
+filters:
+  and:
+    - file.inFolder("Examples/Garden Moisture")
+properties:
+  note.soil-raised-bed:
+    displayName: Raised Bed
+  note.soil-lawn:
+    displayName: Lawn
+  note.soil-pot:
+    displayName: Potted Plant
+  note.soil-greenhouse:
+    displayName: Greenhouse
+views:
+  - type: chart
+    name: Line — yMax=0.5
+    order:
+      - soil-raised-bed
+      - soil-lawn
+      - soil-pot
+      - soil-greenhouse
+    chartType: line
+    showPoints: true
+    showLegend: true
+    showXLabels: true
+    showYLabels: true
+    yMin: "0"
+    yMax: "0.5"
+    lineSmooth: linear
+    lineWidth: 2
+    colors:
+      - var(--color-brown)
+      - var(--color-green)
+      - var(--color-orange)
+      - var(--color-cyan)
+  - type: chart
+    name: Bar — yMax=0.5
+    order:
+      - soil-pot
+      - soil-lawn
+      - soil-raised-bed
+      - soil-greenhouse
+    chartType: bar
+    barWidth: 40
+    showLegend: true
+    showXLabels: true
+    showYLabels: true
+    yMin: "0"
+    yMax: "0.5"
+    colors:
+      - var(--color-orange)
+      - var(--color-green)
+      - var(--color-brown)
+      - var(--color-cyan)
+  - type: chart
+    name: Auto yMax (comparison)
+    order:
+      - soil-raised-bed
+      - soil-lawn
+      - soil-pot
+      - soil-greenhouse
+    chartType: bar
+    barWidth: 40
+    showLegend: true
+    showXLabels: true
+    showYLabels: true
+    yMin: "0"
+    colors:
+      - var(--color-brown)
+      - var(--color-green)
+      - var(--color-orange)
+      - var(--color-cyan)

@@ -1,0 +1,31 @@
+filters:
+  and:
+    - file.inFolder("Examples/Daily")
+properties:
+  note.weight:
+    displayName: Weight (kg)
+views:
+  - type: chart
+    name: Last entries
+    order:
+      - weight
+    sort: []
+    chartType: line
+    colors:
+      - var(--color-blue)
+    showPoints: true
+    showXLine: true
+    xLineStyle: dashed
+    xLineWidth: 0.5
+    yLineWidth: 0.5
+    lineWidth: 2
+    yMax: "90"
+    yMin: "50"
+    showLabels: false
+    showLegend: true
+    referenceLineValue: "76"
+    referenceLineWidth: 0.5
+    referenceLineStyle: solid
+    referenceLineName: Goal
+    referenceLineColor: var(--color-pink)
+    lineSmooth: linear

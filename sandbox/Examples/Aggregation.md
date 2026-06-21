@@ -1,13 +1,19 @@
+---
+tags:
+  - type/bar
+  - option/aggregation
+aliases:
+  - Sales
+  - Revenue
+description: Example aggregation sales.
+rank: 2
+---
+
+```base
 filters:
   and:
     - file.hasProperty("sales_test_revenue")
 views:
-  - type: table
-    name: Aggregation Test Data
-    order:
-      - sales_test_quarter
-      - sales_test_region
-      - sales_test_revenue
   - type: chart
     name: Revenue by Quarter
     order:
@@ -33,3 +39,11 @@ views:
     showXLabels: true
     showYLabels: true
     yMin: "0"
+  - type: table
+    name: Aggregation Test Data
+    order:
+      - sales_test_quarter
+      - sales_test_region
+      - sales_test_revenue
+
+```

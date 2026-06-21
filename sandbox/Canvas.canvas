@@ -1,7 +1,0 @@
-{
-	"nodes":[
-		{"id":"6be55aa7aaddae94","type":"file","file":"Base.base","subpath":"#Bar Chart","x":0,"y":520,"width":1040,"height":780},
-		{"id":"ddd34ce7e4bb6422","type":"file","file":"Base.base","subpath":"#Line Chart","x":-1120,"y":520,"width":1040,"height":780}
-	],
-	"edges":[]
-}
