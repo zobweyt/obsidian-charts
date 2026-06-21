@@ -44,16 +44,20 @@ export class Line {
           ? [points.filter((p): p is Point => p !== null)]
           : segmentsFromPoints(points);
 
+        let segmentIndex = 0;
         for (const segment of renderSegments) {
           if (segment.length < 2) continue;
           if (area !== "none") {
             renderArea(
               clip,
+              this.chart.svg,
               segment,
               curve,
               this.chart.baseline,
               resolvedColor,
               area,
+              seriesIndex,
+              segmentIndex,
             );
           }
 
@@ -65,6 +69,7 @@ export class Line {
             color,
             lineWidth,
           );
+          segmentIndex++;
         }
 
         if (this.chart.showLabels) {

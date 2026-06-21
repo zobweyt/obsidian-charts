@@ -41,12 +41,52 @@ export function createSvgGridLine(
   return line;
 }
 
-export function gradientFill(color: string): string {
-  const svgContent =
-    `<svg xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity="0.25"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient></defs></svg>`;
-  return `url("data:image/svg+xml;charset=utf-8,${
-    encodeURIComponent(svgContent)
-  }#gradient")`;
+let gradientCounter = 0;
+
+export function createGradient(
+  svg: SVGSVGElement,
+  color: string,
+  seriesIndex: number,
+  segmentIndex: number,
+): string {
+  let defs = svg.querySelector("defs") as SVGDefsElement | null;
+  if (!defs) {
+    defs = createSvg("defs") as SVGDefsElement;
+    svg.insertBefore(defs, svg.firstChild);
+  }
+
+  const id =
+    `line-gradient-${seriesIndex}-${segmentIndex}-${gradientCounter++}`;
+  const gradient = createSvg("linearGradient", {
+    attr: {
+      id,
+      x1: "0",
+      y1: "0",
+      x2: "0",
+      y2: "1",
+    },
+  });
+
+  const stop1 = createSvg("stop", {
+    attr: {
+      offset: "0%",
+      "stop-color": color,
+      "stop-opacity": "0.25",
+    },
+  });
+  const stop2 = createSvg("stop", {
+    attr: {
+      offset: "100%",
+      "stop-color": color,
+      "stop-opacity": "0",
+    },
+  });
+
+  gradient.appendChild(stop1);
+  gradient.appendChild(stop2);
+  defs.appendChild(gradient);
+
+  return `url(#${id})`;
 }
 
 export function resolveColor(element: HTMLElement, value: string): string {

@@ -1,5 +1,5 @@
 import { ChartContext } from "../chart/context.ts";
-import { createSvgTextElement, gradientFill } from "../chart/svg.ts";
+import { createGradient, createSvgTextElement } from "../chart/svg.ts";
 import { createPath } from "./path.ts";
 
 import { Point } from "../../lib/point.ts";
@@ -40,20 +40,26 @@ export function segmentsFromPoints(points: (Point | null)[]): Point[][] {
 
 export function renderArea(
   parent: SVGGElement,
+  svg: SVGSVGElement,
   points: Point[],
   curve: string,
   baseline: number,
   resolvedColor: string,
   areaMode: string,
+  seriesIndex: number,
+  segmentIndex: number,
 ) {
   const path = createSvg("path", {
     attr: {
       d: createPath(points, curve, true, baseline),
     },
   });
-  path.style.fill = areaMode === "gradient"
-    ? gradientFill(resolvedColor)
-    : resolvedColor;
+  path.setAttribute(
+    "fill",
+    areaMode === "gradient"
+      ? createGradient(svg, resolvedColor, seriesIndex, segmentIndex)
+      : resolvedColor,
+  );
   path.style.opacity = areaMode === "gradient" ? "1" : "0.25";
   path.style.pointerEvents = "none";
   parent.appendChild(path);
