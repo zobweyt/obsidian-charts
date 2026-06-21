@@ -11,7 +11,7 @@ export function computePoints(
 ): (Point | null)[] {
   return values.map((value, index) => {
     if ((value === null || value === 0) && !connectZeros) return null;
-    const x = chart.padding.left + chart.groupWidth * (index + 0.5);
+    const x = chart.xPositions[index];
     const pointValue = value ?? 0;
     return {
       x,
@@ -92,10 +92,12 @@ export function renderPoints(
   values: (number | null)[],
   lineWidth: number,
   color: string,
+  xLabels?: string[],
 ) {
   values.forEach((_, index) => {
     const point = points[index];
     if (!point) return;
+    if (xLabels && !xLabels[index]) return;
     const circle = createSvg("circle", {
       cls: "bases-chart-dot",
       attr: {
@@ -120,11 +122,13 @@ export function renderLabels(
   points: (Point | null)[],
   values: (number | null)[],
   lineWidth: number,
+  xLabels?: string[],
 ) {
   const gap = Math.round(2 + 1.5 * lineWidth) + 4;
   values.forEach((value, index) => {
     const point = points[index];
     if (!point) return;
+    if (xLabels && !xLabels[index]) return;
     createSvgTextElement(
       parent,
       point.x,

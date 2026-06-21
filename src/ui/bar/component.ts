@@ -34,8 +34,7 @@ export class Bar {
           if (value === null) return;
           const barHeight = ((value - this.chart.minValue) /
             this.chart.valueRange) * this.chart.plotHeight;
-          const barX = this.chart.padding.left +
-            this.chart.groupWidth * (index + 0.5) - contentWidth / 2 +
+          const barX = this.chart.xPositions[index] - contentWidth / 2 +
             seriesIndex * step;
           const barY = this.chart.baseline - barHeight;
           const bar = createSvg("path", {

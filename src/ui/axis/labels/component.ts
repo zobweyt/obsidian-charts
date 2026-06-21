@@ -52,7 +52,8 @@ export class AxisLabels {
     let previousRight = -Infinity;
     (this.context.labels as string[]).forEach(
       (label, index) => {
-        const x = chart.padding.left + chart.groupWidth * (index + 0.5);
+        if (!label) return;
+        const x = chart.xPositions[index];
         const halfWidth = computeRotatedTextHalfWidth(label, rotation);
         if (x - halfWidth < previousRight) return;
         previousRight = x + halfWidth;

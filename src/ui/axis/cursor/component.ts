@@ -10,6 +10,7 @@ export class AxisCursor {
     handler: EventListener;
   }[] = [];
   private activeIndex: number = 0;
+  private lastResolvedIndex: number = 0;
 
   highlight?: (index: number | null) => void;
 
@@ -18,10 +19,27 @@ export class AxisCursor {
     private tooltip: Tooltip,
   ) {}
 
+  private resolveIndex(event: MouseEvent): number {
+    const chart = this.context.chart;
+    const rect = chart.container.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const cellIndex = Math.floor(
+      (mouseX - chart.padding.left) / chart.groupWidth,
+    );
+    if (cellIndex < 0 || cellIndex >= chart.groupCount) return -1;
+    return cellIndex;
+  }
+
+  private isValidIndex(index: number): boolean {
+    if (index < 0) return false;
+    return this.context.chart.xScale !== "numeric" ||
+      this.context.chart.xValuesRaw[index] !== null;
+  }
+
   renderTargets(parent?: SVGElement) {
     const chart = this.context.chart;
     this.targets = [];
-    if (chart.groupWidth <= 0 || chart.plotHeight <= 0) return;
+    if (chart.groupCount <= 0 || chart.plotHeight <= 0) return;
 
     for (let index = 0; index < chart.groupCount; index++) {
       const x = chart.padding.left + chart.groupWidth * index;
@@ -42,6 +60,8 @@ export class AxisCursor {
   }
 
   private onMouseEnter(index: number, event: MouseEvent) {
+    this.lastResolvedIndex = index;
+    if (!this.isValidIndex(index)) return;
     const chart = this.context.chart;
     const rect = chart.container.getBoundingClientRect();
     this.updateFocusableIndex(index);
@@ -53,18 +73,20 @@ export class AxisCursor {
     );
   }
 
-  private onMouseLeave(index: number) {
-    this.updateFocusableIndex(index);
+  private onMouseLeave() {
+    this.updateFocusableIndex(this.lastResolvedIndex);
     this.highlight?.(null);
     this.tooltip.hide();
   }
 
   private onMouseDown(index: number) {
+    if (!this.isValidIndex(index)) return;
     this.updateFocusableIndex(index);
   }
 
   private onFocus(index: number, target: SVGRectElement) {
     if (!target.matches(":focus-visible")) return;
+    if (!this.isValidIndex(index)) return;
     const chart = this.context.chart;
     this.updateFocusableIndex(index);
     this.highlight?.(index);
@@ -81,14 +103,17 @@ export class AxisCursor {
   }
 
   private onClick(index: number, event: MouseEvent) {
+    if (!this.isValidIndex(index)) return;
     this.openFile(index, event);
   }
 
   private onContextMenu(index: number, event: MouseEvent) {
+    if (!this.isValidIndex(index)) return;
     this.openContextMenu(index, event);
   }
 
   private onAuxClick(index: number, event: MouseEvent) {
+    if (!this.isValidIndex(index)) return;
     if (event.button === 1) this.openFile(index, event);
   }
 
@@ -134,7 +159,7 @@ export class AxisCursor {
 
       const onMouseEnter = (event: Event) =>
         this.onMouseEnter(index, event as MouseEvent);
-      const onMouseLeave = () => this.onMouseLeave(index);
+      const onMouseLeave = () => this.onMouseLeave();
       const onMouseDown = () => this.onMouseDown(index);
       const onFocus = () => this.onFocus(index, target);
       const onBlur = () => this.onBlur();

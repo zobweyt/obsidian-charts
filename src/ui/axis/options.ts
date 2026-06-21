@@ -27,6 +27,18 @@ export const X_AXIS_OPTION = {
   default: "file.name",
 } satisfies ViewOption;
 
+export const X_AXIS_SCALE_OPTION = {
+  key: "xAxisScale",
+  type: "dropdown",
+  displayName: t("xAxisScaleLabel"),
+  default: "auto",
+  options: {
+    auto: t("xAxisScaleAuto"),
+    category: t("xAxisScaleCategory"),
+    numeric: t("xAxisScaleNumeric"),
+  },
+} satisfies ViewOption;
+
 export const Y_MAX_OPTION = {
   key: "yMax",
   type: "text",
@@ -46,6 +58,7 @@ export const X_OPTION = {
   displayName: t("xAxisGroup"),
   items: [
     X_AXIS_OPTION,
+    X_AXIS_SCALE_OPTION,
     SHOW_X_LINE_OPTION,
     X_LINE_WIDTH_OPTION,
     X_LINE_STYLE_OPTION,
