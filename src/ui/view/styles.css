@@ -4,7 +4,6 @@
   overflow: hidden;
   flex: 1;
   min-height: 0;
-  cursor: var(--cursor);
 }
 
 .bases-chart-container {
