@@ -1,0 +1,79 @@
+filters:
+  and:
+    - file.inFolder("Examples/Temperature Readings")
+properties:
+  note.temperature:
+    displayName: Temperature (°C)
+  note.reading_day:
+    displayName: Reading Day
+  note.reading_date:
+    displayName: Reading Date
+views:
+  - type: chart
+    name: By Date — Category
+    order:
+      - temperature
+    xAxis: reading_date
+    chartType: line
+    showPoints: true
+    showXLabels: true
+    showYLabels: true
+    showLegend: true
+    yMin: "36"
+    yMax: "39"
+    xAxisScale: category
+    colors:
+      - var(--color-red)
+    showXLine: true
+  - type: chart
+    name: By Date — Numeric
+    order:
+      - temperature
+    xAxis: note.reading_date
+    chartType: line
+    showPoints: true
+    showXLabels: true
+    showYLabels: true
+    showLegend: true
+    yMin: "36"
+    yMax: "39"
+    xAxisScale: numeric
+    colors:
+      - var(--color-red)
+    showXLine: true
+  - type: chart
+    name: By Day Number — Category
+    order:
+      - temperature
+    xAxis: reading_day
+    chartType: line
+    showPoints: true
+    showXLabels: true
+    showYLabels: true
+    showLegend: true
+    yMin: "36"
+    yMax: "39"
+    xAxisScale: category
+    colors:
+      - var(--color-blue)
+    showXLine: true
+  - type: chart
+    name: By Day Number — Numeric
+    order:
+      - temperature
+    chartType: bar
+    showPoints: true
+    showXLabels: true
+    showYLabels: true
+    showLegend: true
+    yMin: "36"
+    yMax: "39"
+    xAxisScale: numeric
+    colors:
+      - var(--color-blue)
+    showXLine: true
+    showYLine: true
+    showLabels: true
+    xLineWidth: 1
+    xLineStyle: solid
+    xAxis: note.reading_day

@@ -40,9 +40,10 @@ export class Line {
           attr: { "clip-path": `url(#${clipPathId})` },
         });
 
-        const renderSegments: Point[][] = this.chart.connectZeros
-          ? [points.filter((p): p is Point => p !== null)]
-          : segmentsFromPoints(points);
+        const renderSegments: Point[][] =
+          this.chart.connectZeros || this.chart.xScale === "numeric"
+            ? [points.filter((p): p is Point => p !== null)]
+            : segmentsFromPoints(points);
 
         let segmentIndex = 0;
         for (const segment of renderSegments) {
@@ -73,11 +74,18 @@ export class Line {
         }
 
         if (this.chart.showLabels) {
-          renderLabels(clip, points, values, lineWidth);
+          renderLabels(clip, points, values, lineWidth, this.chart.xLabels);
         }
 
         if (this.chart.showPoints) {
-          renderPoints(clip, points, values, lineWidth, color);
+          renderPoints(
+            clip,
+            points,
+            values,
+            lineWidth,
+            color,
+            this.chart.xLabels,
+          );
         }
 
         parent.appendChild(clip);
