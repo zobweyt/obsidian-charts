@@ -28,20 +28,19 @@ import {
   parseNumericValue,
 } from "./aggregate.ts";
 
+declare const moment: {
+  (value: number | string | Date): {
+    format(template: string): string;
+    isValid(): boolean;
+    valueOf(): number;
+  };
+};
+
 function formatDateLabel(value: number, showTime: boolean): string {
-  const date = new Date(value);
-  if (showTime) {
-    return date.toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    });
-  }
-  return date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-  });
+  const m = moment(value);
+  if (!m.isValid()) return "";
+  const formatted = showTime ? m.format("MMM D HH:mm") : m.format("MMM D");
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
 
 const HOUR = 3600000;
@@ -115,7 +114,7 @@ export function createChartContext(options: ChartOptions): ChartContext {
     const rawValue = value instanceof NumberValue
       ? parseFloat(value.toString())
       : value instanceof DateValue
-      ? new Date(value.toString()).getTime()
+      ? moment(value.toString()).valueOf()
       : null;
     if (
       value !== null && !(value instanceof NumberValue) &&
@@ -131,7 +130,9 @@ export function createChartContext(options: ChartOptions): ChartContext {
   });
   const hasStringXValue = xEntries.some((e) => e.hasStringXValue);
   const rawXLabels = xEntries.map((e) => e.label);
-  const rawXValues = xEntries.map((e) => e.rawValue);
+  const rawXValues = xEntries.map((e) =>
+    e.rawValue !== null && isNaN(e.rawValue) ? null : e.rawValue
+  );
   const rawValues = data.properties.map((property: BasesPropertyId) =>
     data.data.map((entry) => {
       const rawValue = entry.getValue(property);
@@ -172,6 +173,18 @@ export function createChartContext(options: ChartOptions): ChartContext {
     }
   });
   let resolvedXValues = xLabels.map((label) => xValueMap.get(label) ?? null);
+  const allValidValues = resolvedXValues.filter((v): v is number => v !== null);
+  const isTimestamp = allValidValues.length > 0 &&
+    Math.abs(allValidValues[0]) > 1e11;
+  const showTime = isTimestamp &&
+    allValidValues.some((v) => v % 86400000 !== 0);
+  if (isTimestamp) {
+    xLabels = xLabels.map((_, i) =>
+      resolvedXValues[i] !== null
+        ? formatDateLabel(resolvedXValues[i]!, showTime)
+        : ""
+    );
+  }
   const xAxisScaleMode = (config.get(X_AXIS_SCALE_OPTION.key) ||
     X_AXIS_SCALE_OPTION.default) as string;
   const xScale: "category" | "numeric" = xAxisScaleMode === "category"
@@ -197,9 +210,6 @@ export function createChartContext(options: ChartOptions): ChartContext {
     groupFilePaths = indices.map((i) => groupFilePaths[i]);
     values = values.map((series) => indices.map((i) => series[i]));
     const validValues = resolvedXValues.filter((v): v is number => v !== null);
-    const isTimestamp = validValues.length > 0 &&
-      Math.abs(validValues[0]) > 1e11;
-    const showTime = isTimestamp && validValues.some((v) => v % 86400000 !== 0);
     if (validValues.length >= 2) {
       const diffs: number[] = [];
       for (let i = 1; i < validValues.length; i++) {

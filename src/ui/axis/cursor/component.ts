@@ -19,17 +19,6 @@ export class AxisCursor {
     private tooltip: Tooltip,
   ) {}
 
-  private resolveIndex(event: MouseEvent): number {
-    const chart = this.context.chart;
-    const rect = chart.container.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const cellIndex = Math.floor(
-      (mouseX - chart.padding.left) / chart.groupWidth,
-    );
-    if (cellIndex < 0 || cellIndex >= chart.groupCount) return -1;
-    return cellIndex;
-  }
-
   private isValidIndex(index: number): boolean {
     if (index < 0) return false;
     return this.context.chart.xScale !== "numeric" ||
@@ -42,13 +31,30 @@ export class AxisCursor {
     if (chart.groupCount <= 0 || chart.plotHeight <= 0) return;
 
     for (let index = 0; index < chart.groupCount; index++) {
-      const x = chart.padding.left + chart.groupWidth * index;
+      let x: number;
+      let width: number;
+
+      if (chart.xScale === "numeric" && !chart.xCellsExpanded) {
+        x = chart.xPositions[index];
+        const prevX = index > 0
+          ? chart.xPositions[index - 1]
+          : chart.padding.left;
+        const nextX = index < chart.groupCount - 1
+          ? chart.xPositions[index + 1]
+          : chart.padding.left +
+            (chart.width - chart.padding.left - chart.padding.right);
+        width = (x - prevX) / 2 + (nextX - x) / 2;
+      } else {
+        x = chart.padding.left + chart.groupWidth * index;
+        width = chart.groupWidth;
+      }
+
       const rect = createSvg("rect", {
         cls: "bases-chart-cursor-target",
         attr: {
           x,
           y: chart.padding.top,
-          width: chart.groupWidth,
+          width,
           height: chart.plotHeight,
           tabindex: index === this.activeIndex ? 0 : -1,
         },

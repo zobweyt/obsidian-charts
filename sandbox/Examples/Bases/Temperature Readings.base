@@ -13,7 +13,7 @@ views:
     name: By Date — Category
     order:
       - temperature
-    xAxis: reading_date
+    xAxis: note.reading_date
     chartType: line
     showPoints: true
     showXLabels: true

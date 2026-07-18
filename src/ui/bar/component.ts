@@ -14,8 +14,24 @@ export class Bar {
     const clip = createSvg("g", {
       attr: { "clip-path": `url(#${clipPathId})` },
     });
-    const perBar = this.chart.groupWidth /
-      Math.max(this.chart.values.length, 1);
+    let perBar: number;
+    if (
+      this.chart.xScale === "numeric" && !this.chart.xCellsExpanded
+    ) {
+      const validPositions = this.chart.xPositions.filter((_, i) =>
+        this.chart.xValuesRaw[i] !== null
+      );
+      let minGap = Infinity;
+      for (let i = 1; i < validPositions.length; i++) {
+        minGap = Math.min(minGap, validPositions[i] - validPositions[i - 1]);
+      }
+      perBar = minGap === Infinity || minGap <= 0
+        ? this.chart.groupWidth
+        : minGap;
+    } else {
+      perBar = this.chart.groupWidth /
+        Math.max(this.chart.values.length, 1);
+    }
     const barWidth = perBar *
       ((this.chart.config.get(BAR_WIDTH_OPTION.key) ||
         BAR_WIDTH_OPTION.default) as number) /
