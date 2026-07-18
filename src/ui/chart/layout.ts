@@ -172,4 +172,26 @@ export function computeLayout(ax: AxisContext, ay: AxisContext) {
     0,
     (chart.width - chart.padding.left - chart.padding.right) / chart.groupCount,
   );
+  if (chart.xScale === "numeric" && !chart.xCellsExpanded) {
+    const valid = chart.xValuesRaw.filter((v): v is number => v !== null);
+    if (valid.length > 0) {
+      const xMin = Math.min(...valid);
+      const xMax = Math.max(...valid);
+      const xRange = xMax - xMin || 1;
+      const plotWidth = chart.width - chart.padding.left - chart.padding.right;
+      chart.xPositions = chart.xValuesRaw.map((v) =>
+        v !== null
+          ? chart.padding.left + ((v - xMin) / xRange) * plotWidth
+          : chart.padding.left
+      );
+    } else {
+      chart.xPositions = chart.xLabels.map((_, i) =>
+        chart.padding.left + chart.groupWidth * (i + 0.5)
+      );
+    }
+  } else {
+    chart.xPositions = chart.xLabels.map((_, i) =>
+      chart.padding.left + chart.groupWidth * (i + 0.5)
+    );
+  }
 }
