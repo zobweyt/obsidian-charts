@@ -2,6 +2,9 @@
 
 We welcome all contributions! Please follow this guide to set up your environment and submit your changes.
 
+> [!NOTE]
+> **Project Status:** The creator is not using Obsidian anymore and won't develop new features; plugin is now **community-driven** — please submit **Pull Requests**, and they will be gladly reviewed and merged by the creator!
+
 ## Quick Start
 
 1. Find an issue in [Milestones](https://github.com/zobweyt/obsidian-charts/milestones), prioritizing top issues or those labeled [help wanted](https://github.com/zobweyt/obsidian-charts/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22help%20wanted%22) and [good first issue](https://github.com/zobweyt/obsidian-charts/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22).
